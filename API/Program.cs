@@ -49,11 +49,12 @@ namespace API
             builder.Services.AddSingleton<IEditable<Admin>, AdminSvc>();
             builder.Services.AddSingleton<IDeletable<Guid, Admin>, AdminSvc>();
             //FoodCategory
-            builder.Services.AddTransient<IAddable<FoodCategory>, FoodCategorySvc>();
-            builder.Services.AddScoped<IReadable<FoodCategory>, FoodCategorySvc>();
-            builder.Services.AddTransient<ILookupSvc<string, FoodCategory>, FoodCategorySvc>();
-            builder.Services.AddTransient<IEditable<FoodCategory>, FoodCategorySvc>();
-            builder.Services.AddTransient<IDeletable<string, FoodCategory>, FoodCategorySvc>();
+            builder.Services.AddSingleton<IAddable<FoodCategory>, FoodCategorySvc>();
+            builder.Services.AddTransient<IReadable<FoodCategory>, FoodCategorySvc>();
+            builder.Services.AddSingleton<ILookupSvc<string, FoodCategory>, FoodCategorySvc>();
+            builder.Services.AddSingleton<ILookupSvc<Guid, FoodCategory>, FoodCategorySvc>();
+            builder.Services.AddSingleton<IEditable<FoodCategory>, FoodCategorySvc>();
+            builder.Services.AddSingleton<IDeletable<Guid, FoodCategory>, FoodCategorySvc>();
             //Food
             builder.Services.AddTransient<IAddable<Food>, FoodSvc>();
             builder.Services.AddScoped<IReadable<Food>, FoodSvc>();

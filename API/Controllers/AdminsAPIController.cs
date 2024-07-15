@@ -43,7 +43,7 @@ namespace API.Controllers
         /// <response Code="200">Tìm thấy</response>
         /// <returns>Danh sách quản trị viên</returns>
         [HttpGet]
-        public async Task<IEnumerable<Admin>> Getadmins()
+        public async Task<IEnumerable<Admin>> GetAdmins()
         {
             return await _readsvc.ReadDatas();
         }
@@ -51,12 +51,12 @@ namespace API.Controllers
         /// <summary>
         /// Lấy thông tin quản trị theo adminCode
         /// </summary>
-        /// <param name="code">mã quản trị</param>
+        /// <param name="code">adminCode</param>
         /// <response Code="404">Không tìm thấy</response>
         /// <response Code="200">Tìm thấy</response>
         /// <returns>Quản trị viên</returns>
         [HttpGet("{code}")]
-        public async Task<IActionResult> GetAdmin(Guid code)
+        public async Task<IActionResult> GetAdminByCode(Guid code)
         {
             var find = await _lookupsvc2.GetDataByKey(code);
             if(find == null)
@@ -119,6 +119,7 @@ namespace API.Controllers
         /// </remarks>
         /// <response Code="404">Không tìm thấy</response>
         /// <response Code="201">Thành công</response>
+        /// <response name="403">email bị trùng</response>
         /// <returns>Quản trị mới</returns>
         [HttpPost]
         public async Task<IActionResult> PostAdmin(Admin admin)
@@ -134,7 +135,7 @@ namespace API.Controllers
         /// <summary>
         /// Xóa một quản trị 
         /// </summary>
-        /// <param name="code">mã quản trị</param>
+        /// <param name="code">adminCode</param>
         /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>
         [HttpDelete("{code}")]

@@ -1,4 +1,4 @@
-﻿using UI.Models;
+﻿using Models;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,74 +12,128 @@ namespace API.ApiController
         private readonly IAddable<FoodCategory> _addsvc;
         private readonly IReadable<FoodCategory> _readsvc;
         private readonly ILookupSvc<string, FoodCategory> _lookupsvc;
+        private readonly ILookupSvc<Guid, FoodCategory> _lookupsvc2;
         private readonly IEditable<FoodCategory> _editsvc;
-        private readonly IDeletable<string, FoodCategory> _deletesvc;
+        private readonly IDeletable<Guid, FoodCategory> _deletesvc;
         public FoodCategoriesAPIController(IAddable<FoodCategory> addsvc,
             IReadable<FoodCategory> readsvc,
             ILookupSvc<string, FoodCategory> lookupsvc,
+            ILookupSvc<Guid, FoodCategory> lookupsvc2,
             IEditable<FoodCategory> editsvc,
-            IDeletable<string, FoodCategory> deletesvc)
+            IDeletable<Guid, FoodCategory> deletesvc)
         {
             _addsvc = addsvc;
             _readsvc = readsvc;
             _lookupsvc = lookupsvc;
+            _lookupsvc2 = lookupsvc2;
             _editsvc = editsvc;
             _deletesvc = deletesvc;
         }
 
-        // GET: api/categories
+        /// <summary>
+        /// Lấy danh sách phân loại thức ăn
+        /// </summary>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="200">Tìm thấy</response>
+        /// <returns>Danh sách phân loại thức ăn</returns>
         [HttpGet]
-        public async Task<IEnumerable<FoodCategory>> Getfoodcategories()
+        public async Task<IEnumerable<FoodCategory>> GetFoodCategories()
         {
             return await _readsvc.ReadDatas();
         }
 
-        // GET: api/categories/5
+        /// <summary>
+        /// Lấy thông tin phân loại thức ăn theo fCategoryCode
+        /// </summary>
+        /// <param name="code">fCategoryCode</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="200">Tìm thấy</response>
+        /// <returns>Phân loại thức ăn</returns>
         [HttpGet("{code}")]
-        public async Task<ActionResult<FoodCategory>> Getfoodcategory(string code)
+        public async Task<IActionResult> GetfoodcategoryByCode(Guid code)
         {
-            var fcate = await _lookupsvc.GetDataByKey(code);
-
-            if (fcate == null)
+            var data = await _lookupsvc2.GetDataByKey(code);
+            if(data == null)
             {
                 return NotFound();
             }
-
-            return fcate;
+            return Ok(data);
         }
 
-        // GET: api/categories/string/name
-        [HttpGet("string/{name}")]
-        public async Task<ActionResult<FoodCategory>> GetfoodcategoryByString(string name)
+        /// <summary>
+        /// Lấy thông tin phân loại thức ăn theo categoryName
+        /// </summary>
+        /// <param name="name">categoryName</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="200">Tìm thấy</response>
+        /// <returns>Phân loại thức ăn</returns>
+        [HttpGet("categoryname/{name}")]
+        public async Task<IActionResult> GetfoodcategoryByName(string name)
         {
-            var fcate = await _lookupsvc.GetDataByString(name);
-            return fcate;
+            var data = await _lookupsvc.GetDataByKey(name);
+            if(data == null)
+            {
+                return NotFound(); 
+            }
+            return Ok(data);
         }
 
-        // PUT: api/categories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Chỉnh sửa một loại thức ăn được chọn theo fCategoryCode
+        /// </summary>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="202">Thành công</response>
+        /// <returns>Thức ăn được chỉnh sửa</returns>
         [HttpPut("{code}")]
-        public async Task<bool> PutFoodcategory(string code, FoodCategory fcate)
+        public async Task<IActionResult> PutFoodcategory(Guid code, FoodCategory fcate)
         {
-            bool done = await _editsvc.EditData(fcate);
-            return done;
+            if (code != fcate.FCategoryCode)
+            {
+                return NotFound();
+            }
+            var data = await _editsvc.EditData(fcate);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return Accepted(data);
         }
 
-        // POST: api/categories
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Thêm một loại thức ăn mới 
+        /// </summary>
+        /// <remarks>
+        /// Mẫu:
+        /// {
+        ///     categoryName: 'Snacks'
+        /// }
+        /// </remarks>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="403">categoryName bị trùng</response>
+        /// <response name="201">Thành công</response>
+        /// <returns>Thức ăn mới</returns>
         [HttpPost]
-        public async Task<bool> PostFoodcategory(FoodCategory fcate)
+        public async Task<IActionResult> PostFoodcategory(FoodCategory fcate)
         {
-            bool done = await _addsvc.AddNewData(fcate);
-            return done;
+            var data = _addsvc.AddNewData(fcate);
+            if(data == null)
+            {
+                return Forbid();
+            }
+            return Created();
         }
 
-        // DELETE: api/categories/5
+        /// <summary>
+        /// Xóa một loại thức ăn
+        /// </summary>
+        /// <param name="code">fCategoryCode</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <returns></returns>
         [HttpDelete("{code}")]
-        public async Task<bool> DeleteFoodcategory(string code)
+        public async Task<IActionResult> DeleteFoodcategory(Guid code)
         {
-            bool done = await _deletesvc.DeleteData(code);
-            return done;
+            var data = await _deletesvc.DeleteData(code);
+            return Ok(data);
         }
     }
 }

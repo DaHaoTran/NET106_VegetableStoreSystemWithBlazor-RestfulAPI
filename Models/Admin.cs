@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Net.Mime;
@@ -9,6 +10,7 @@ namespace Models
     {
         [Key]
         [AllowNull]
+        [DisplayName("Mã quản trị")]
         public Guid AdminCode { get; set; }
 
         [Column(TypeName = "Varchar(200)")]
@@ -22,11 +24,14 @@ namespace Models
         public string Password { get; set; }
 
         [AllowNull]
+        [DisplayName("Trạng thái")]
         public bool IsOnl { get; set; }
 
         [AllowNull]
+        [DisplayName("Ngày tạo")]
         public DateTime CreatedDate { get; set; }
 
+        [DisplayName("Cấp bậc quản trị")]
         public bool Level {  get; set; }
 
         public ICollection<Food>? foods { get; set; }
