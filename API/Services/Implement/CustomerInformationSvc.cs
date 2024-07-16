@@ -6,7 +6,7 @@ using DTO;
 
 namespace API.Services.Implement
 {
-    public class CustomerInformationSvc : ILookupSvc<int, CustomerInformation>, IAddable<CustomerInformation>, IReadable<CustomerInformation>, IDeletable<int, CustomerInformation>, IEditable<CustomerInformation>
+    public class CustomerInformationSvc : ILookupSvc<int, CustomerInformation>, ILookupMoreSvc<string , CustomerInformation>, IAddable<CustomerInformation>, IReadable<CustomerInformation>, IDeletable<int, CustomerInformation>, IEditable<CustomerInformation>
     {
         private readonly FastFoodDBContext _dbContext;
         public CustomerInformationSvc(FastFoodDBContext dbContext)
@@ -26,19 +26,6 @@ namespace API.Services.Implement
             return id;
         }
 
-        /// <summary>
-        /// Thêm một thông tin khách hàng mới
-        /// </summary>
-        /// <remarks>
-        /// Mẫu:
-        /// {
-        ///     customerName: 'Trần Văn B',
-        ///     phoneNumber: '0394857621',
-        ///     address: 'Công viên phần mềm Quang Trung',
-        ///     customerEmail: '...' (tài khoản khách hàng đã tạo)
-        ///  }
-        /// </remarks>
-        /// <returns></returns>
         public async Task<CustomerInformation> AddNewData(CustomerInformation entity)
         {
             entity.CInforId = NewId();
@@ -51,11 +38,6 @@ namespace API.Services.Implement
             return entity;
         }
 
-        /// <summary>
-        /// Xóa một thông tin khách hàng 
-        /// </summary>
-        /// <param name="key">cInforId</param>
-        /// <returns></returns>
         public async Task<string> DeleteData(int key)
         {
             var find = await _dbContext.customerInformations.Where(x => x.CInforId == key).FirstOrDefaultAsync();
@@ -68,10 +50,6 @@ namespace API.Services.Implement
             return $"Xóa {key} thành công !";
         }
 
-        /// <summary>
-        /// Sửa một thông tin khách hàng theo id
-        /// </summary>
-        /// <returns>Thông tin khách hàng đã sửa</returns>
         public async Task<CustomerInformation> EditData(CustomerInformation entity)
         {
             var find = await _dbContext.customerInformations.Where(x => x.CInforId == entity.CInforId).FirstOrDefaultAsync();
@@ -86,11 +64,6 @@ namespace API.Services.Implement
             return find;
         }
 
-        /// <summary>
-        /// Lấy thông tin khách hàng theo id
-        /// </summary>
-        /// <param name="key">cInforId</param>
-        /// <returns>Thông tin khách hàng</returns>
         public async Task<CustomerInformation> GetDataByKey(int key)
         {
             var find = await _dbContext.customerInformations.Where(x => x.CInforId == key).FirstOrDefaultAsync();
@@ -101,13 +74,15 @@ namespace API.Services.Implement
             return find;
         }
 
-        /// <summary>
-        /// Lấy danh sách thông tin khách hàng
-        /// </summary>
-        /// <returns>Danh sách thông tin khách hàng</returns>
         public async Task<IEnumerable<CustomerInformation>> ReadDatas()
         {
             return await _dbContext.customerInformations.ToListAsync();
+        }
+
+        public async Task<IEnumerable<CustomerInformation>> GetListByKey(string key)
+        {
+            var find = await _dbContext.customerInformations.Where(x => x.CustomerEmail == key).ToListAsync();
+            return find;
         }
     }
 }

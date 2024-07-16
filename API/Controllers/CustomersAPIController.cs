@@ -63,6 +63,7 @@ namespace API.Controllers
         /// </summary>
         /// <response name="404">Không tìm thấy</response>
         /// <response name="202">Thành công</response>
+        /// <param name="email">email</param>
         /// <returns>Khách hàng đã chỉnh sửa</returns>
         [HttpPut("{email}")]
         public async Task<IActionResult> PutCustomer(string email, [FromBody] Customer cus)

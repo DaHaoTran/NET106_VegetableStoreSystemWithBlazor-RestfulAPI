@@ -4,4 +4,8 @@
     {
         Task<Result> GetDataByKey(Key key);
     }
+    public interface ILookupMoreSvc<Key, Result>
+    {
+        Task<IEnumerable<Result>> GetListByKey(Key key);
+    }
 }

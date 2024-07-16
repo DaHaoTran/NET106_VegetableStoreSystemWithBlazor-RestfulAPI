@@ -83,6 +83,7 @@ namespace API.ApiController
         /// </summary>
         /// <response name="404">Không tìm thấy</response>
         /// <response name="202">Thành công</response>
+        /// <param name="code">fCategoryCode</param>
         /// <returns>Thức ăn được chỉnh sửa</returns>
         [HttpPut("{code}")]
         public async Task<IActionResult> PutFoodcategory(Guid code, [FromBody] FoodCategory fcate)

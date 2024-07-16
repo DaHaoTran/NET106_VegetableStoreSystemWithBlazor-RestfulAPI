@@ -90,6 +90,7 @@ namespace API.Controllers
         /// <response Code="404">Không tìm thấy</response>
         /// <response Code="403">Admin có thể IsOnl = true hoặc không tìm thấy</response>
         /// <response Code="202">Thành công</response>
+        /// <param name="code">adminCode</param>
         /// <returns>Quản trị được chỉnh sửa</returns>
         [HttpPut("{code}")]
         public async Task<IActionResult> PutAdmin(Guid code, [FromBody] Admin admin)
