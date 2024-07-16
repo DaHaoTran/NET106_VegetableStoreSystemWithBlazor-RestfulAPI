@@ -45,7 +45,7 @@ namespace API.Controllers
         /// <response name="404">Không tìm thấy</response>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Guest>> GetGuest(int id)
+        public async Task<ActionResult<Guest>> GetGuestById(int id)
         {
             var data = await _lookupsvc.GetDataByKey(id);
             if (data == null)
@@ -60,7 +60,7 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>
         /// Lưu ý:
-        /// Hãy có một order bên bảng orders trước khi thực hiện thêm mới này
+        /// Hãy có một order trong orders (table database) trước khi thực hiện thêm mới này
         /// </remarks>
         /// <example>
         /// {

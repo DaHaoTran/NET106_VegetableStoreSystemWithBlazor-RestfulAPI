@@ -87,6 +87,10 @@ namespace API.Controllers
         /// <summary>
         /// Chỉnh sửa một quản trị được chọn theo adminCode
         /// </summary>
+        /// <remarks>
+        /// Lưu ý:
+        /// Thuộc tính IsOnl của dữ liệu bắt buộc là false
+        /// </remarks>
         /// <response Code="404">Không tìm thấy</response>
         /// <response Code="403">Admin có thể IsOnl = true hoặc không tìm thấy</response>
         /// <response Code="202">Thành công</response>
@@ -110,18 +114,17 @@ namespace API.Controllers
         /// <summary>
         /// Thêm một quản trị mới
         /// </summary>
-        /// <remarks>
-        /// mẫu:
+        /// <example>
         /// {
         ///     "email": "abc1@gmail.com",
         ///     "password": "abc123@",
         ///     "level": "staff"
         /// }
-        /// </remarks>
+        /// </example>
         /// <response Code="404">Không tìm thấy</response>
         /// <response Code="201">Thành công</response>
         /// <response name="403">Email bị trùng</response>
-        /// <returns>Quản trị mới</returns>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostAdmin([FromBody] Admin admin)
         {
@@ -136,6 +139,10 @@ namespace API.Controllers
         /// <summary>
         /// Xóa một quản trị 
         /// </summary>
+        /// <remarks>
+        /// Lưu ý:
+        /// Thuộc tính IsOnl của dữ liệu bắt buộc là false
+        /// </remarks>
         /// <param name="code">adminCode</param>
         /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>

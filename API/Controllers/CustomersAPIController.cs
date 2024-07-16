@@ -48,7 +48,7 @@ namespace API.Controllers
         /// <response name="200">Tìm thấy</response>
         /// <returns>Thông tin khách hàng</returns>
         [HttpGet("{email}")]
-        public async Task<ActionResult<Customer>> Getcustomer(string email)
+        public async Task<ActionResult<Customer>> GetcustomerByEmail(string email)
         {
             var data = await _lookupsvc.GetDataByKey(email);
             if (data == null)
@@ -83,16 +83,15 @@ namespace API.Controllers
         /// <summary>
         /// Thêm một khách hàng mới
         /// </summary>
-        /// <remarks>
-        /// Mẫu:
+        /// <example>
         /// {
         ///     "email": "abc1@gmail.com",
         ///     "passWord": "Abc123"
         /// }
-        /// </remarks>
+        /// </example>
         /// <response name="404">Email đã được sử dụng</response>
         /// <response name="201">Thành công</response>
-        /// <returns>Khách hàng mới</returns>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostCustomer([FromBody] Customer cus)
         {

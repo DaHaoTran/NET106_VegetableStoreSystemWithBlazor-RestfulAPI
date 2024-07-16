@@ -34,14 +34,17 @@ namespace API.Controllers
         /// Thêm một thông tin khách hàng mới
         /// </summary>
         /// <remarks>
-        /// Mẫu:
+        /// Lưu ý:
+        /// Hãy có một customer trong customers (table database) trước khi thực hiện thêm mới này
+        /// </remarks>
+        /// <example>
         /// {
         ///     "customerName": "Trần Văn B",
         ///     "phoneNumber": "0394857621",
         ///     "address": "Công viên phần mềm Quang Trung",
         ///     "customerEmail": "..." (email tài khoản khách hàng đã tạo)
         ///  }
-        /// </remarks>
+        /// </example>
         /// <response name="404">Không tìm thấy tài khoản có email trùng khớp</response>
         /// <response name="201">Thành công</response>
         /// <returns></returns>

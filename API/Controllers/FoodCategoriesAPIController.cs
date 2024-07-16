@@ -103,16 +103,15 @@ namespace API.ApiController
         /// <summary>
         /// Thêm một loại thức ăn mới 
         /// </summary>
-        /// <remarks>
-        /// Mẫu:
+        /// <example>
         /// {
         ///     "categoryName": "Snacks"
         /// }
-        /// </remarks>
+        /// </example>
         /// <response name="404">Không tìm thấy</response>
         /// <response name="403">categoryName bị trùng</response>
         /// <response name="201">Thành công</response>
-        /// <returns>Thức ăn mới</returns>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostFoodcategory([FromBody] FoodCategory fcate)
         {
