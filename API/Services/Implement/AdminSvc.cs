@@ -39,8 +39,12 @@ namespace API.Services.Implement
 
         public async Task<string> DeleteData(Guid key)
         {
-            var find = await GetDataByKey(key);
-            if (find.IsOnl != true)
+            var find = await _dbContext.admins.Where(x => x.AdminCode == key).FirstOrDefaultAsync();
+            if(find == default)
+            {
+                return "Không tìm thấy";
+            }
+            if (find.IsOnl == true)
             {
                 return "Xóa thất bại, thuộc tính IsOnl đang là true !";
             }
@@ -54,12 +58,12 @@ namespace API.Services.Implement
 
         public async Task<Admin> EditData([FromBody] Admin entity)
         {
-            if(entity.IsOnl == true)
+            var find = await _dbContext.admins.Where(x => x.Email == entity.Email).FirstOrDefaultAsync();
+            if(find == default)
             {
                 return null;
             }
-            var find = await _dbContext.admins.Where(x => x.Email == entity.Email).FirstOrDefaultAsync();
-            if(find == default)
+            if (find.IsOnl == true)
             {
                 return null;
             }

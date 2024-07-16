@@ -56,14 +56,14 @@ namespace API.Controllers
         /// <response Code="200">Tìm thấy</response>
         /// <returns>Quản trị viên</returns>
         [HttpGet("{code}")]
-        public async Task<IActionResult> GetAdminByCode(Guid code)
+        public async Task<ActionResult<Admin>> GetAdminByCode(Guid code)
         {
-            var find = await _lookupsvc2.GetDataByKey(code);
-            if(find == null)
+            var data = await _lookupsvc2.GetDataByKey(code);
+            if(data == null)
             {
                 return NotFound();
             }
-            return Ok(find);
+            return data;
         }
 
         /// <summary>
@@ -74,14 +74,14 @@ namespace API.Controllers
         /// <response Code="200">Tìm thấy</response>
         /// <returns>Quản trị viên</returns>
         [HttpGet("email/{email}")]
-        public async Task<IActionResult> GetAdminByEmail(string email)
+        public async Task<ActionResult<Admin>> GetAdminByEmail(string email)
         {
-            var find = await _lookupsvc.GetDataByKey(email);
-            if (find == null)
+            var data = await _lookupsvc.GetDataByKey(email);
+            if (data == null)
             {
                 return NotFound();
             }
-            return Ok(find);
+            return data;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace API.Controllers
         /// </remarks>
         /// <response Code="404">Không tìm thấy</response>
         /// <response Code="201">Thành công</response>
-        /// <response name="403">email bị trùng</response>
+        /// <response name="403">Email bị trùng</response>
         /// <returns>Quản trị mới</returns>
         [HttpPost]
         public async Task<IActionResult> PostAdmin(Admin admin)

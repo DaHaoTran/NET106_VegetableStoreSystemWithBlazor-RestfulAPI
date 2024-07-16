@@ -50,14 +50,14 @@ namespace API.ApiController
         /// <response name="200">Tìm thấy</response>
         /// <returns>Phân loại thức ăn</returns>
         [HttpGet("{code}")]
-        public async Task<IActionResult> GetfoodcategoryByCode(Guid code)
+        public async Task<ActionResult<FoodCategory>> GetfoodcategoryByCode(Guid code)
         {
             var data = await _lookupsvc2.GetDataByKey(code);
             if(data == null)
             {
                 return NotFound();
             }
-            return Ok(data);
+            return data;
         }
 
         /// <summary>
@@ -68,14 +68,14 @@ namespace API.ApiController
         /// <response name="200">Tìm thấy</response>
         /// <returns>Phân loại thức ăn</returns>
         [HttpGet("categoryname/{name}")]
-        public async Task<IActionResult> GetfoodcategoryByName(string name)
+        public async Task<ActionResult<FoodCategory>> GetfoodcategoryByName(string name)
         {
             var data = await _lookupsvc.GetDataByKey(name);
             if(data == null)
             {
                 return NotFound(); 
             }
-            return Ok(data);
+            return data;
         }
 
         /// <summary>

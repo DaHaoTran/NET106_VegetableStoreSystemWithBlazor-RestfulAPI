@@ -62,17 +62,17 @@ namespace API
             builder.Services.AddTransient<IEditable<Food>, FoodSvc>();
             builder.Services.AddTransient<IDeletable<string, Food>, FoodSvc>();
             //Customer
-            builder.Services.AddTransient<IAddable<Customer>, CustomerSvc>();
-            builder.Services.AddScoped<IReadable<Customer>, CustomerSvc>();
-            builder.Services.AddTransient<ILookupSvc<string, Customer>, CustomerSvc>();
-            builder.Services.AddTransient<IEditable<Customer>, CustomerSvc>();
-            builder.Services.AddTransient<IDeletable<string, Customer>, CustomerSvc>();
+            builder.Services.AddSingleton<IAddable<Customer>, CustomerSvc>();
+            builder.Services.AddTransient<IReadable<Customer>, CustomerSvc>();
+            builder.Services.AddSingleton<ILookupSvc<string, Customer>, CustomerSvc>();
+            builder.Services.AddSingleton<IEditable<Customer>, CustomerSvc>();
+            builder.Services.AddSingleton<IDeletable<string, Customer>, CustomerSvc>();
             //CustomerInformation
-            builder.Services.AddScoped<ILookupSvc<int, CustomerInformation>, CustomerInformationSvc>();
+            builder.Services.AddSingleton<ILookupSvc<int, CustomerInformation>, CustomerInformationSvc>();
             builder.Services.AddTransient<IAddable<CustomerInformation>, CustomerInformationSvc>();
-            builder.Services.AddScoped<IReadable<CustomerInformation>, CustomerInformationSvc>();
-            builder.Services.AddTransient<IDeletable<int, CustomerInformation>, CustomerInformationSvc>();
-            builder.Services.AddScoped<IReadableHasWhere<string, CustomerInformation>, CustomerInformationSvc>();
+            builder.Services.AddSingleton<IReadable<CustomerInformation>, CustomerInformationSvc>();
+            builder.Services.AddSingleton<IDeletable<int, CustomerInformation>, CustomerInformationSvc>();
+            builder.Services.AddSingleton<IReadableHasWhere<string, CustomerInformation>, CustomerInformationSvc>();
             //Order
             builder.Services.AddScoped<IReadableHasWhere<string, Order>, OrderSvc>();
             builder.Services.AddTransient<ILookupSvc<int, Order>, OrderSvc>();

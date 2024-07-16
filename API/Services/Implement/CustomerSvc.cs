@@ -1,16 +1,17 @@
 ﻿using API.Context;
-using UI.Models;
+using Models;
 using API.Services.Implement;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using DTO;
 
 namespace API.Services.Implement
 {
     public class CustomerSvc : ILookupSvc<string, Customer>, IAddable<Customer>, IEditable<Customer>, IDeletable<string, Customer>, IReadable<Customer>
     {
-        private readonly FoodShopDBContext _dbContext;
-        public CustomerSvc(FoodShopDBContext dbContext)
+        private readonly FastFoodDBContext _dbContext;
+        public CustomerSvc(FastFoodDBContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -31,77 +32,57 @@ namespace API.Services.Implement
             return input.Substring(0, atIndex);
         }
 
-        public async Task<bool> AddNewData(Customer entity)
+        public async Task<Customer> AddNewData(Customer entity)
         {
-            if(await _dbContext.customer.Where(x => x.Email == entity.Email).FirstOrDefaultAsync() == default)
+            var find = await _dbContext.customers.Where(x => x.Email == entity.Email).FirstOrDefaultAsync();
+            if (find != default)
             {
-                try
-                {
-                    entity.AdminCode = await _dbContext.admins.Where(x => x.Email == entity.AdminCode).Select(x => x.AdminCode).FirstOrDefaultAsync();
-                    entity.UserName = CutStringBeforeAt(entity.Email);
-                    entity.PassWord = AuthencationDataSvc.EncryptionPassword(entity.PassWord);
-                    await _dbContext.customer.AddAsync(entity);
-                    await _dbContext.SaveChangesAsync();
-                    return true;
-                }
-                catch
-                {
-                    return false;
-                }
+                return null;
             }
-            else
-            {
-                return false;
-            }
+            entity.UserName = CutStringBeforeAt(entity.Email);
+            entity.PassWord = AuthencationDataSvc.EncryptionPassword(entity.PassWord);
+            await _dbContext.customers.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public async Task<bool> DeleteData(string key)
+        public async Task<string> DeleteData(string key)
         {
-            try
+            var find = await _dbContext.customers.Where(x => x.Email == key).FirstOrDefaultAsync();
+            if (find == default)
             {
-                var find = await GetDataByKey(key);
-                _dbContext.customer.Remove(find);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            } catch
-            {
-                return false;
+                return "Không tìm thấy";
             }
+            _dbContext.customers.Remove(find);
+            await _dbContext.SaveChangesAsync();
+            return $"Xóa {key} thành công !";
         }
 
-        public async Task<bool> EditData(Customer entity)
+        public async Task<Customer> EditData(Customer entity)
         {
-            try
+            var find = await _dbContext.customers.Where(x => x.Email == entity.Email).FirstOrDefaultAsync();
+            if(find == default)
             {
-                var find = await GetDataByKey(entity.Email);
-                Task task = Task.Run(async () =>
-                {
-                    var admin = await _dbContext.admins.Where(x => x.Email == entity.AdminCode).FirstOrDefaultAsync();
-                    find.AdminCode = admin!.AdminCode;
-                    find.PassWord = AuthencationDataSvc.EncryptionPassword(entity.PassWord);
-                });
-                task.Wait();
-                await _dbContext.SaveChangesAsync();
-                return true;
-            } catch
-            {
-                return false;
+                return null;
             }
+            find.PassWord = AuthencationDataSvc.EncryptionPassword(entity.PassWord);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public Task<Customer> GetDataByKey(string key)
+        public async Task<Customer> GetDataByKey(string key)
         {
-            return _dbContext.customer.Where(x => x.Email == key).FirstOrDefaultAsync()!;
-        }
-
-        public Task<Customer> GetDataByString(string str)
-        {
-            return _dbContext.customer.Where(x => x.UserName == str.Trim()).FirstOrDefaultAsync()!;
+            var find = await _dbContext.customers.Where(x => x.Email == key).FirstOrDefaultAsync();
+            if (find == default)
+            {
+                return null;
+            }
+            return find;
         }
 
         public async Task<IEnumerable<Customer>> ReadDatas()
         {
-            return await _dbContext.customer.ToListAsync();
+            return await _dbContext.customers.ToListAsync();
         }
     }
 }

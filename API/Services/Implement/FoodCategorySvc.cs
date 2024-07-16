@@ -19,7 +19,7 @@ namespace API.Services.Implement
         public async Task<FoodCategory> AddNewData(FoodCategory entity)
         {
             var find = await _dbContext.foodCategories.Where(x => x.CategoryName.Contains(entity.CategoryName, StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
-            if (find == default)
+            if (find != default)
             {
                 return null;
             }
@@ -34,11 +34,11 @@ namespace API.Services.Implement
             var find = await _dbContext.foodCategories.Where(x => x.FCategoryCode == key).FirstOrDefaultAsync();
             if(find == default)
             {
-                return "Error";
+                return "Không tìm thấy";
             }
             _dbContext.foodCategories.Remove(find);
             await _dbContext.SaveChangesAsync();
-            return $"Xóa {key} thành công";
+            return $"Xóa {key} thành công !";
         }
 
         public async Task<FoodCategory> EditData(FoodCategory entity)

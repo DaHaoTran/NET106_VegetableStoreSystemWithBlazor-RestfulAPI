@@ -1,7 +1,8 @@
-﻿using UI.Models;
+﻿using Models;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace API.Controllers
 {
@@ -27,67 +28,92 @@ namespace API.Controllers
             _deletesvc = deletesvc;
         }
 
-        // GET: api/customers
+        /// <summary>
+        /// Lấy danh sách khách hàng
+        /// </summary>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="200">Tìm thấy</response>
+        /// <returns>Danh sách khách hàng</returns>
         [HttpGet]
         public async Task<IEnumerable<Customer>> GetCustomers()
         {
             return await _readsvc.ReadDatas();
         }
 
-        // GET: api/customers/5
-        [HttpGet("{code}")]
-        public async Task<ActionResult<Customer>> Getcustomer(string code)
+        /// <summary>
+        /// Lấy thông tin khách hàng theo email
+        /// </summary>
+        /// <param name="email">email</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="200">Tìm thấy</response>
+        /// <returns>Thông tin khách hàng</returns>
+        [HttpGet("{email}")]
+        public async Task<ActionResult<Customer>> Getcustomer(string email)
         {
-            var cus = await _lookupsvc.GetDataByKey(code);
-
-            if (cus == null)
+            var data = await _lookupsvc.GetDataByKey(email);
+            if (data == null)
             {
                 return NotFound();
             }
-
-            return cus;
+            return data;
         }
 
-        // GET: api/customers/string/name
-        [HttpGet("string/{name}")]
-        public async Task<ActionResult<Customer>> GetCustomerByString(string name)
+        /// <summary>
+        /// Chỉnh sửa một khách hàng được chọn theo email
+        /// </summary>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="202">Thành công</response>
+        /// <returns>Khách hàng đã chỉnh sửa</returns>
+        [HttpPut("{email}")]
+        public async Task<IActionResult> PutCustomer(string email, Customer cus)
         {
-            var cus = await _lookupsvc.GetDataByString(name);
-            return cus;
+            if(email != cus.Email)
+            {
+                return NotFound();
+            }
+            var data = await _editsvc.EditData(cus);
+            if(data == null)
+            {
+                return NotFound(); 
+            }
+            return Accepted(data);
         }
 
-        // PUT: api/customers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{code}")]
-        public async Task<bool> PutCustomer(string code, Customer cus)
-        {
-            bool done = false;
-            if (code != cus.Email)
-            {
-                return false;
-            }
-            else
-            {
-                done = await _editsvc.EditData(cus);
-            }
-            return done;
-        }
-
-        // POST: api/customers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Thêm một khách hàng mới
+        /// </summary>
+        /// <remarks>
+        /// Mẫu:
+        /// {
+        ///     email: 'abc1@gmail.com',
+        ///     passWord: 'Abc123'
+        /// }
+        /// </remarks>
+        /// <response name="404">Email đã được sử dụng</response>
+        /// <response name="201">Thành công</response>
+        /// <returns>Khách hàng mới</returns>
         [HttpPost]
-        public async Task<bool> PostCustomer(Customer cus)
+        public async Task<IActionResult> PostCustomer(Customer cus)
         {
-            bool done = await _addsvc.AddNewData(cus);
-            return done;
+            var data = await _addsvc.AddNewData(cus);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return Created();
         }
 
-        // DELETE: api/customers/5
-        [HttpDelete("{code}")]
-        public async Task<bool> DeleteCustomer(string code)
+        /// <summary>
+        /// Xóa một khách hàng
+        /// </summary>
+        /// <param name="email">email</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <returns></returns>
+        [HttpDelete("{email}")]
+        public async Task<IActionResult> DeleteCustomer(string email)
         {
-            bool done = await _deletesvc.DeleteData(code);
-            return done;
+            var data = await _deletesvc.DeleteData(email);
+            return Ok(data);
         }
     }
 }
