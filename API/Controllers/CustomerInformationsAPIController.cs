@@ -36,15 +36,15 @@ namespace API.Controllers
         /// <remarks>
         /// Mẫu:
         /// {
-        ///     customerName: 'Trần Văn B',
-        ///     phoneNumber: '0394857621',
-        ///     address: 'Công viên phần mềm Quang Trung',
-        ///     customerEmail: '...' (tài khoản khách hàng đã tạo)
+        ///     "customerName": "Trần Văn B",
+        ///     "phoneNumber": "0394857621",
+        ///     "address": "Công viên phần mềm Quang Trung",
+        ///     "customerEmail": "..." (email tài khoản khách hàng đã tạo)
         ///  }
         /// </remarks>
         /// <response name="404">Không tìm thấy tài khoản có email trùng khớp</response>
-        /// <response name="200">Thành công</response>
-        /// <returns>Thông tin khách hàng mới</returns>
+        /// <response name="201">Thành công</response>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostInformation([FromBody] CustomerInformation information)
         {
@@ -53,7 +53,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            return Ok(data);
+            return Created();
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace API.Controllers
         /// </summary>
         /// <param name="id">cInforId</param>
         /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Thành công</response>
+        /// <response name="202">Thành công</response>
         /// <returns>Thông tin khách hàng đã sửa</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInformation(int id, [FromBody] CustomerInformation information)
@@ -120,7 +120,7 @@ namespace API.Controllers
             {
                 return NotFound();
             }
-            return Ok(data);
+            return Accepted(data);
         }
 
         /// <summary>

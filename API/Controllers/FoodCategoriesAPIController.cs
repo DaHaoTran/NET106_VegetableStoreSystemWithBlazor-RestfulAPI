@@ -106,7 +106,7 @@ namespace API.ApiController
         /// <remarks>
         /// Mẫu:
         /// {
-        ///     categoryName: 'Snacks'
+        ///     "categoryName": "Snacks"
         /// }
         /// </remarks>
         /// <response name="404">Không tìm thấy</response>

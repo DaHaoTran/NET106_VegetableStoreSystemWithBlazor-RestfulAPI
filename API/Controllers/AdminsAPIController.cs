@@ -113,9 +113,9 @@ namespace API.Controllers
         /// <remarks>
         /// mẫu:
         /// {
-        ///     email: 'abc1@gmail.com',
-        ///     password: 'abc123@',
-        ///     level: 'staff',
+        ///     "email": "abc1@gmail.com",
+        ///     "password": "abc123@",
+        ///     "level": "staff"
         /// }
         /// </remarks>
         /// <response Code="404">Không tìm thấy</response>

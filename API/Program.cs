@@ -74,6 +74,11 @@ namespace API
             builder.Services.AddTransient<IReadable<CustomerInformation>, CustomerInformationSvc>();
             builder.Services.AddSingleton<IDeletable<int, CustomerInformation>, CustomerInformationSvc>();
             builder.Services.AddSingleton<IEditable<CustomerInformation>, CustomerInformationSvc>();
+            //Guest
+            builder.Services.AddTransient<IReadable<Guest>, GuestSvc>();
+            builder.Services.AddSingleton<IAddable<Guest>, GuestSvc>();
+            builder.Services.AddSingleton<IDeletable<int, Guest>, GuestSvc>();
+            builder.Services.AddSingleton<ILookupSvc<int, Guest>, GuestSvc>();
             //Order
             builder.Services.AddScoped<IReadableHasWhere<string, Order>, OrderSvc>();
             builder.Services.AddTransient<ILookupSvc<int, Order>, OrderSvc>();

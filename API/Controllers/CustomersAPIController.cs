@@ -86,8 +86,8 @@ namespace API.Controllers
         /// <remarks>
         /// Mẫu:
         /// {
-        ///     email: 'abc1@gmail.com',
-        ///     passWord: 'Abc123'
+        ///     "email": "abc1@gmail.com",
+        ///     "passWord": "Abc123"
         /// }
         /// </remarks>
         /// <response name="404">Email đã được sử dụng</response>
