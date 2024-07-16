@@ -16,7 +16,7 @@ namespace API.Services.Implement
             _dbContext = dBContext;
         }
 
-        public async Task<Admin> AddNewData([FromBody] Admin entity)
+        public async Task<Admin> AddNewData(Admin entity)
         {
             var exist = await _dbContext.admins.Where(x => x.Email == entity.Email).FirstOrDefaultAsync();
             if (exist != default)
@@ -56,7 +56,7 @@ namespace API.Services.Implement
             }
         }
 
-        public async Task<Admin> EditData([FromBody] Admin entity)
+        public async Task<Admin> EditData(Admin entity)
         {
             var find = await _dbContext.admins.Where(x => x.Email == entity.Email).FirstOrDefaultAsync();
             if(find == default)

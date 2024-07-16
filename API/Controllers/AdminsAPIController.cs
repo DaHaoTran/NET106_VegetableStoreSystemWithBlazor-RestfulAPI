@@ -92,7 +92,7 @@ namespace API.Controllers
         /// <response Code="202">Thành công</response>
         /// <returns>Quản trị được chỉnh sửa</returns>
         [HttpPut("{code}")]
-        public async Task<IActionResult> PutAdmin(Guid code, Admin admin)
+        public async Task<IActionResult> PutAdmin(Guid code, [FromBody] Admin admin)
         {
             if(code != admin.AdminCode)
             {
@@ -122,7 +122,7 @@ namespace API.Controllers
         /// <response name="403">Email bị trùng</response>
         /// <returns>Quản trị mới</returns>
         [HttpPost]
-        public async Task<IActionResult> PostAdmin(Admin admin)
+        public async Task<IActionResult> PostAdmin([FromBody] Admin admin)
         {
             var data = await _addsvc.AddNewData(admin);
             if (data == null)

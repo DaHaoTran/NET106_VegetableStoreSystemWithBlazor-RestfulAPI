@@ -85,7 +85,7 @@ namespace API.ApiController
         /// <response name="202">Thành công</response>
         /// <returns>Thức ăn được chỉnh sửa</returns>
         [HttpPut("{code}")]
-        public async Task<IActionResult> PutFoodcategory(Guid code, FoodCategory fcate)
+        public async Task<IActionResult> PutFoodcategory(Guid code, [FromBody] FoodCategory fcate)
         {
             if (code != fcate.FCategoryCode)
             {
@@ -113,9 +113,9 @@ namespace API.ApiController
         /// <response name="201">Thành công</response>
         /// <returns>Thức ăn mới</returns>
         [HttpPost]
-        public async Task<IActionResult> PostFoodcategory(FoodCategory fcate)
+        public async Task<IActionResult> PostFoodcategory([FromBody] FoodCategory fcate)
         {
-            var data = _addsvc.AddNewData(fcate);
+            var data = await _addsvc.AddNewData(fcate);
             if(data == null)
             {
                 return Forbid();

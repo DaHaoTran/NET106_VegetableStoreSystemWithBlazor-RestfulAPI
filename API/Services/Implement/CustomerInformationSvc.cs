@@ -2,57 +2,112 @@
 using Models;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DTO;
 
 namespace API.Services.Implement
 {
     public class CustomerInformationSvc : ILookupSvc<int, CustomerInformation>, IAddable<CustomerInformation>, IReadable<CustomerInformation>, IDeletable<int, CustomerInformation>, IEditable<CustomerInformation>
     {
-        private FoodShopDBContext _dbContext;
-        public CustomerInformationSvc(FoodShopDBContext dbContext)
+        private readonly FastFoodDBContext _dbContext;
+        public CustomerInformationSvc(FastFoodDBContext dbContext)
         {
             _dbContext = dbContext;
         }
 
+        private int NewId()
+        {
+            int id = _dbContext.customerInformations.Count() + 1;
+            int count = 0;
+            while(_dbContext.customerInformations.Any(x => x.CInforId == id))
+            {
+                count++;
+                id += count;
+            }
+            return id;
+        }
+
+        /// <summary>
+        /// Thêm một thông tin khách hàng mới
+        /// </summary>
+        /// <remarks>
+        /// Mẫu:
+        /// {
+        ///     customerName: 'Trần Văn B',
+        ///     phoneNumber: '0394857621',
+        ///     address: 'Công viên phần mềm Quang Trung',
+        ///     customerEmail: '...' (tài khoản khách hàng đã tạo)
+        ///  }
+        /// </remarks>
+        /// <returns></returns>
         public async Task<CustomerInformation> AddNewData(CustomerInformation entity)
         {
-            try
+            entity.CInforId = NewId();
+            if(_dbContext.customers.Any(x => x.Email != entity.CustomerEmail))
             {
-                await _dbContext.customerInformation.AddAsync(entity);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            } catch
-            {
-                return false;
+                return null;
             }
+            await _dbContext.customerInformations.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
+        /// <summary>
+        /// Xóa một thông tin khách hàng 
+        /// </summary>
+        /// <param name="key">cInforId</param>
+        /// <returns></returns>
         public async Task<string> DeleteData(int key)
         {
-            try
+            var find = await _dbContext.customerInformations.Where(x => x.CInforId == key).FirstOrDefaultAsync();
+            if(find == default)
             {
-                var find = await GetDataByKey(key);
-                _dbContext.customerInformation.Remove(find);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            } catch
-            {
-                return false;
+                return "Không tìm thấy";
             }
+            _dbContext.customerInformations.Remove(find);
+            await _dbContext.SaveChangesAsync();
+            return $"Xóa {key} thành công !";
         }
 
-        public Task<CustomerInformation> EditData(CustomerInformation entity)
+        /// <summary>
+        /// Sửa một thông tin khách hàng theo id
+        /// </summary>
+        /// <returns>Thông tin khách hàng đã sửa</returns>
+        public async Task<CustomerInformation> EditData(CustomerInformation entity)
         {
-            throw new NotImplementedException();
+            var find = await _dbContext.customerInformations.Where(x => x.CInforId == entity.CInforId).FirstOrDefaultAsync();
+            if(find == default)
+            {
+                return null;
+            }
+            find.PhoneNumber = entity.PhoneNumber;
+            find.CustomerName = entity.CustomerName;
+            find.Address = entity.Address;
+            await _dbContext.SaveChangesAsync();
+            return find;
         }
 
-        public Task<CustomerInformation> GetDataByKey(int key)
+        /// <summary>
+        /// Lấy thông tin khách hàng theo id
+        /// </summary>
+        /// <param name="key">cInforId</param>
+        /// <returns>Thông tin khách hàng</returns>
+        public async Task<CustomerInformation> GetDataByKey(int key)
         {
-            return _dbContext.customerInformation.Where(x => x.CInforId == key).FirstOrDefaultAsync()!;
+            var find = await _dbContext.customerInformations.Where(x => x.CInforId == key).FirstOrDefaultAsync();
+            if (find == default)
+            {
+                return null;
+            }
+            return find;
         }
 
+        /// <summary>
+        /// Lấy danh sách thông tin khách hàng
+        /// </summary>
+        /// <returns>Danh sách thông tin khách hàng</returns>
         public async Task<IEnumerable<CustomerInformation>> ReadDatas()
         {
-            return await _dbContext.customerInformation.ToListAsync();
+            return await _dbContext.customerInformations.ToListAsync();
         }
     }
 }

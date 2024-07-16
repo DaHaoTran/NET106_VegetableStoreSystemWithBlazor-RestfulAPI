@@ -65,7 +65,7 @@ namespace API.Controllers
         /// <response name="202">Thành công</response>
         /// <returns>Khách hàng đã chỉnh sửa</returns>
         [HttpPut("{email}")]
-        public async Task<IActionResult> PutCustomer(string email, Customer cus)
+        public async Task<IActionResult> PutCustomer(string email, [FromBody] Customer cus)
         {
             if(email != cus.Email)
             {
@@ -93,7 +93,7 @@ namespace API.Controllers
         /// <response name="201">Thành công</response>
         /// <returns>Khách hàng mới</returns>
         [HttpPost]
-        public async Task<IActionResult> PostCustomer(Customer cus)
+        public async Task<IActionResult> PostCustomer([FromBody] Customer cus)
         {
             var data = await _addsvc.AddNewData(cus);
             if (data == null)
