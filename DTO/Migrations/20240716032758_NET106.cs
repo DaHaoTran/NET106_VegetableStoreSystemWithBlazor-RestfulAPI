@@ -92,8 +92,7 @@ namespace DTO.Migrations
                 name: "customerInformations",
                 columns: table => new
                 {
-                    CInforId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CInforId = table.Column<int>(type: "int", nullable: false),
                     CustomerName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     PhoneNumber = table.Column<string>(type: "Char(10)", maxLength: 10, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),

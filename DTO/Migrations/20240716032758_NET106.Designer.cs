@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DTO.Migrations
 {
     [DbContext(typeof(FastFoodDBContext))]
-    [Migration("20240714063828_NET106")]
+    [Migration("20240716032758_NET106")]
     partial class NET106
     {
         /// <inheritdoc />

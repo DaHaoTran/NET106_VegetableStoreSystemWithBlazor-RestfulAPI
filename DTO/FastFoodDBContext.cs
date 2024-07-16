@@ -26,7 +26,7 @@ namespace DTO
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //if(!optionsBuilder.IsConfigured)
+            //if (!optionsBuilder.IsConfigured)
             //{
             //    optionsBuilder.UseSqlServer("Data Source=HAOTRAN;Initial Catalog=NET106_ASM_FastFood;Integrated Security=True;Trust Server Certificate=True", b => b.MigrationsAssembly("DTO"));
             //}

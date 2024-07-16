@@ -1,11 +1,11 @@
 ﻿using API.Context;
-using UI.Models;
+using Models;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services.Implement
 {
-    public class CustomerInformationSvc : ILookupSvc<int, CustomerInformation>, IAddable<CustomerInformation>, IReadable<CustomerInformation>, IDeletable<int, CustomerInformation>, IReadableHasWhere<string, CustomerInformation>
+    public class CustomerInformationSvc : ILookupSvc<int, CustomerInformation>, IAddable<CustomerInformation>, IReadable<CustomerInformation>, IDeletable<int, CustomerInformation>, IEditable<CustomerInformation>
     {
         private FoodShopDBContext _dbContext;
         public CustomerInformationSvc(FoodShopDBContext dbContext)
@@ -13,7 +13,7 @@ namespace API.Services.Implement
             _dbContext = dbContext;
         }
 
-        public async Task<bool> AddNewData(CustomerInformation entity)
+        public async Task<CustomerInformation> AddNewData(CustomerInformation entity)
         {
             try
             {
@@ -26,7 +26,7 @@ namespace API.Services.Implement
             }
         }
 
-        public async Task<bool> DeleteData(int key)
+        public async Task<string> DeleteData(int key)
         {
             try
             {
@@ -40,24 +40,19 @@ namespace API.Services.Implement
             }
         }
 
+        public Task<CustomerInformation> EditData(CustomerInformation entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<CustomerInformation> GetDataByKey(int key)
         {
             return _dbContext.customerInformation.Where(x => x.CInforId == key).FirstOrDefaultAsync()!;
         }
 
-        public Task<CustomerInformation> GetDataByString(string str)
-        {
-            return _dbContext.customerInformation.Where(x => x.CustomerEmail == str).FirstOrDefaultAsync()!;
-        }
-
         public async Task<IEnumerable<CustomerInformation>> ReadDatas()
         {
             return await _dbContext.customerInformation.ToListAsync();
-        }
-
-        public async Task<IEnumerable<CustomerInformation>> ReadDatasHasW(string key)
-        {
-            return await _dbContext.customerInformation.Where(x => x.CustomerEmail == key).ToListAsync();
         }
     }
 }

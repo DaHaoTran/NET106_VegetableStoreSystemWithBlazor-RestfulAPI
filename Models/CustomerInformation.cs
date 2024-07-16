@@ -7,7 +7,7 @@ namespace Models
     public class CustomerInformation
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [AllowNull]
         public int CInforId { get; set; }
 
         [MaxLength(500)]
@@ -23,6 +23,7 @@ namespace Models
         public string Address { get; set; }
 
         [Column(TypeName = "Varchar(200)")]
+        [AllowNull]
         public string CustomerEmail { get; set; }
 
         [ForeignKey("CustomerEmail")]
