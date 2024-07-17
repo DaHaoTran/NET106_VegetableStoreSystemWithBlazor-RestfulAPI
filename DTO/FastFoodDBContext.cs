@@ -34,23 +34,15 @@ namespace DTO
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<CustomerInformation>()
-            //    .HasOne<Customer>(x => x.Customer)
-            //    .WithMany(x => x.CustomerInformations)
-            //    .HasForeignKey(x => x.CustomerEmail);
-
-            //modelBuilder.Entity<Customer>()
-            //    .HasOne<Admin>(x => x.Admins)
-            //    .WithMany(x => x.customers)
-            //    .HasForeignKey(x => x.AdminCode);
-
-            //modelBuilder.Entity<Customer>()
-            //    .HasOne<Cart>(x => x.Cart)
-            //    .WithOne(x => x.Customer);
             modelBuilder.Entity<Customer>().HasKey(x => x.Email);
             modelBuilder.Entity<Food>().HasKey(x => x.FoodCode);
             modelBuilder.Entity<FoodCategory>().HasKey(x => x.FCategoryCode);
             modelBuilder.Entity<Combo>().HasKey(x => x.ComboCode);
+
+            //Add Procedures
+            modelBuilder
+            .Entity<Food>()
+            .ToTable(tb => tb.HasTrigger("AUTO_SET_SOLD"));
         }
     }
 }

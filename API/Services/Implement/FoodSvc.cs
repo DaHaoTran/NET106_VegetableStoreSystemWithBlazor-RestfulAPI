@@ -1,51 +1,58 @@
 ﻿using API.Context;
-using UI.Models;
+using Models;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using DTO;
 
 namespace API.Services.Implement
 {
-    public class FoodSvc : ILookupSvc<string, Food>, IAddable<Food>, IEditable<Food>, IDeletable<string, Food>, IReadable<Food>
+    public class FoodSvc : ILookupSvc<string, Food>, IAddable<Food>, IEditable<Food>, IDeletable<Guid, Food>, IReadable<Food>
     {
-        private readonly FoodShopDBContext _dbContext;
-        public FoodSvc(FoodShopDBContext dbContext)
+        private readonly FastFoodDBContext _dbContext;
+        public FoodSvc(FastFoodDBContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<bool> AddNewData(Food entity)
+        /// <summary>
+        /// Thêm một thức ăn mới
+        /// </summary>
+        /// <remarks>
+        /// Lưu ý:
+        /// Hãy có một foodCategory trong foodCategories (table database) trước khi thực hiện thêm mới này
+        /// Hãy có một admin trong admins (table database) trước khi thực hiện thêm mới này
+        /// </remarks>
+        /// <example>
+        /// {
+        ///     "foodName": "Chicken Fried",
+        ///     "currentPrice": "25000",
+        ///     "left": 100,
+        ///     "image": "0394837463.png",
+        ///     "fCategoryCode: "..." (mã phân loại),
+        ///     "adminCode": "..." (mã quản trị)
+        /// }
+        /// </example>
+        /// <returns></returns>
+        public async Task<Food> AddNewData(Food entity)
         {
-            try
+            var data = await _dbContext.foods.Where(x => x.FoodName == entity.FoodName).FirstOrDefaultAsync();
+            if(data != default)
             {
-                Task task = Task.Run(async () =>
-                {
-                    var admin = await _dbContext.admins.Where(x => x.Email == entity.AdminCode).FirstOrDefaultAsync();
-                    entity.AdminCode = admin!.AdminCode;
-                    var code = AuthencationDataSvc.GenerateNewCode(5);
-                    while (_dbContext.admins.Any(x => x.AdminCode == code))
-                    {
-                        code = AuthencationDataSvc.GenerateNewCode(5);
-                    }
-                    entity.FoodCode = code;
-                    entity.Sold = 0;
-                    entity.PreviousPrice = entity.CurrentPrice;
-                    entity.FCategoryCode = await _dbContext.foodCategory.Where(x => x.CategoryName == entity.FCategoryCode).Select(x => x.FCategoryCode).FirstOrDefaultAsync()!;
-                    entity.FTypeCode = await _dbContext.foodType.Where(x => x.TypeName == entity.FTypeCode).Select(x => x.FTypeCode).FirstOrDefaultAsync()!;
-                    //Get Admin test
-                    //entity.AdminCode = await _dbContext.admins.Select(x => x.AdminCode).Take(1).FirstOrDefaultAsync()!;
-                });
-                task.Wait();
-                await _dbContext.foods.AddAsync(entity);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            } catch
-            {
-                return false;
+                return null;
             }
+            Task t = Task.Run(() =>
+            {
+                entity.FoodCode = new Guid();
+                entity.PreviousPrice = entity.CurrentPrice;
+            });
+            t.Wait();
+            await _dbContext.foods.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public async Task<bool> DeleteData(string key)
+        public async Task<string> DeleteData(Guid key)
         {
             try
             {
@@ -59,7 +66,7 @@ namespace API.Services.Implement
             }
         }
 
-        public async Task<bool> EditData(Food entity)
+        public async Task<Food> EditData(Food entity)
         {
             try
             {
@@ -96,11 +103,6 @@ namespace API.Services.Implement
         public Task<Food> GetDataByKey(string key)
         {
             return _dbContext.foods.Where(x => x.FoodCode == key).FirstOrDefaultAsync()!;
-        }
-
-        public Task<Food> GetDataByString(string str)
-        {
-            return _dbContext.foods.Where(x => x.FoodName == str.Trim()).FirstOrDefaultAsync()!;
         }
 
         public async Task<IEnumerable<Food>> ReadDatas()
