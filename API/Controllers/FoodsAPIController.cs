@@ -1,7 +1,8 @@
-﻿using UI.Models;
+﻿using Models;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 namespace API.ApiController
 {
@@ -11,105 +12,136 @@ namespace API.ApiController
     {
         private readonly IAddable<Food> _addsvc;
         private readonly IReadable<Food> _readsvc;
-        private readonly ILookupSvc<string, Food> _lookupsvc;
+        private readonly ILookupMoreSvc<string, Food> _lookupsvc;
+        private readonly ILookupSvc<Guid, Food> _lookupsvc2;    
         private readonly IEditable<Food> _editsvc;
-        private readonly IDeletable<string, Food> _deletesvc;
-        private readonly IReadable<FoodCategory> _foodcategorysvc;
-        private readonly IReadable<FoodType> _foodtypesvc;
+        private readonly IDeletable<Guid, Food> _deletesvc;
         public FoodsAPIController(IAddable<Food> addsvc,
             IReadable<Food> readsvc,
-            ILookupSvc<string, Food> lookupsvc,
+            ILookupMoreSvc<string, Food> lookupsvc,
             IEditable<Food> editsvc,
-            IDeletable<string, Food> deletesvc,
+            IDeletable<Guid, Food> deletesvc,
             IReadable<FoodCategory> foodcategorysvc,
-            IReadable<FoodType> foodtypesvc)
+            ILookupSvc<Guid, Food> lookupsvc2)
         {
             _addsvc = addsvc;
             _readsvc = readsvc;
             _lookupsvc = lookupsvc;
             _editsvc = editsvc;
             _deletesvc = deletesvc;
-            _foodcategorysvc = foodcategorysvc;
-            _foodtypesvc = foodtypesvc;
+            _lookupsvc2 = lookupsvc2;
         }
 
-        // GET: api/foods
+        /// <summary>
+        /// Lấy danh sách thức ăn
+        /// </summary>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="200">Tìm thấy</response>
+        /// <returns>Danh sách thức ăn</returns>
         [HttpGet]
         public async Task<IEnumerable<Food>> Getfoods()
         {
             return await _readsvc.ReadDatas();
         }
 
-        // GET: api/foods
-        [HttpGet("foodtype/name")]
-        public async Task<IEnumerable<string>> GetTypes()
-        {
-            var types = await _foodtypesvc.ReadDatas();
-            return types.Select(x => x.TypeName).ToList();
-        }
-
-        // GET: api/foods
-        [HttpGet("foodcategory/name")]
-        public async Task<IEnumerable<string>> GetCategories()
-        {
-            var fcates = await _foodcategorysvc.ReadDatas();
-            return fcates.Select(x => x.CategoryName).ToList();
-        }
-
-        // GET: api/foods/5
+        /// <summary>
+        /// Lấy thông tin thức ăn theo foodCode
+        /// </summary>
+        /// <param name="code">foodCode</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <returns>Thông tin thức ăn</returns>
         [HttpGet("{code}")]
-        public async Task<ActionResult<Food>> Getfood(string code)
+        public async Task<ActionResult<Food>> GetfoodByCode(Guid code)
         {
-            var food = await _lookupsvc.GetDataByKey(code);
-
-            if (food == null)
+            var data = await _lookupsvc2.GetDataByKey(code);
+            if (data == null)
             {
                 return NotFound();
             }
-
-            return food;
+            return data;
         }
 
-        // GET: api/foods/string/email
-        [HttpGet("string/{name}")]
-        public async Task<ActionResult<Food>> GetFoodByString(string name)
+        /// <summary>
+        /// Lấy thông tin thức ăn theo foodName
+        /// </summary>
+        /// <param name="key">foodName</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <returns>Thông tin thức ăn</returns>
+        [HttpGet("name/{name}")]
+        public async Task<ActionResult<IEnumerable<Food>>> GetFoodByName(string name)
         {
-            var food = await _lookupsvc.GetDataByString(name);
-            return food;
+            var data = await _lookupsvc.GetListByKey(name);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return data.ToList();
         }
 
-        // PUT: api/foods/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Chỉnh sửa một thức ăn theo foodCode
+        /// </summary>
+        /// <response name="404">Không tìm thấy</response>
+        /// <response name="202">Thành công</response>
+        /// <returns>Thức ăn đã chỉnh sửa</returns>
         [HttpPut("{code}")]
-        public async Task<bool> PutFood(string code, Food food)
+        public async Task<IActionResult> PutFood(Guid code, [FromBody] Food food)
         {
-            bool done = false;
-            if (code != food.FoodCode)
+            if(code != food.FoodCode)
             {
-                return false;
+                return NotFound();
             }
-            else
+            var data = await _editsvc.EditData(food);
+            if (data == null)
             {
-                done = await _editsvc.EditData(food);
+                return NotFound();
             }
-            return done;
+            return Accepted(data);
         }
 
-        // POST: api/foods
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Thêm một thức ăn mới
+        /// </summary>
+        /// <remarks>
+        /// Lưu ý:
+        /// Hãy có một foodCategory trong foodCategories (table database) trước khi thực hiện thêm mới này
+        /// Hãy có một admin trong admins (table database) trước khi thực hiện thêm mới này
+        /// </remarks>
+        /// <example>
+        /// {
+        ///     "foodName": "Chicken Fried",
+        ///     "currentPrice": "25000",
+        ///     "left": 100,
+        ///     "image": "0394837463.png",
+        ///     "fCategoryCode: "..." (mã phân loại),
+        ///     "adminCode": "..." (mã quản trị)
+        /// }
+        /// </example>
+        /// <response name="403">foodName đã tồn tại</response>
+        /// <response name="201">Thành công</response>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<bool> PostFood([FromBody]Food food)
+        public async Task<IActionResult> PostFood([FromBody] Food food)
         {
-            bool done = await _addsvc.AddNewData(food);
-            return done;
+            var data = await _addsvc.AddNewData(food);
+            if(data == null)
+            {
+                return Forbid();
+            }
+            return Created();
         }
 
-        // DELETE: api/foods/5
+        /// <summary>
+        /// Xóa một thức ăn
+        /// </summary>
+        /// <param name="code">foodCode</param>
+        /// <response name="200">Thành công</response>
+        /// <returns></returns>
         [HttpDelete("{code}")]
-        public async Task<bool> DeleteFood(string code)
+        public async Task<IActionResult> DeleteFood(Guid code)
         {
-            bool done = await _deletesvc.DeleteData(code);
-            return done;
+            var data = await _deletesvc.DeleteData(code);
+            return Ok(data);
         }
     }
 }

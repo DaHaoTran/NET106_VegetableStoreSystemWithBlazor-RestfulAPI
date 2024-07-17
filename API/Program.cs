@@ -4,6 +4,7 @@ using API.Services.Interfaces;
 using DTO;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace API
@@ -59,6 +60,7 @@ namespace API
             builder.Services.AddSingleton<IAddable<Food>, FoodSvc>();
             builder.Services.AddTransient<IReadable<Food>, FoodSvc>();
             builder.Services.AddSingleton<ILookupMoreSvc<string, Food>, FoodSvc>();
+            builder.Services.AddSingleton<ILookupSvc<Guid, Food>, FoodSvc>();
             builder.Services.AddSingleton<IEditable<Food>, FoodSvc>();
             builder.Services.AddSingleton<IDeletable<Guid, Food>, FoodSvc>();
             //Combo
