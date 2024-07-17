@@ -69,6 +69,11 @@ namespace API
             builder.Services.AddSingleton<ILookupSvc<Guid, Combo>, ComboSvc>();
             builder.Services.AddSingleton<ILookupMoreSvc<string, Combo>, ComboSvc>();
             //ComboDetail
+            builder.Services.AddTransient<IReadable<ComboDetail>, ComboDetailSvc>();
+            builder.Services.AddSingleton<IAddable<ComboDetail>, ComboDetailSvc>();
+            builder.Services.AddSingleton<IEditable<ComboDetail>, ComboDetailSvc>();
+            builder.Services.AddSingleton<IDeletable<int, ComboDetail>, ComboDetailSvc>();
+            builder.Services.AddSingleton<ILookupMoreSvc<Guid, ComboDetail>, ComboDetailSvc>();
             //Customer
             builder.Services.AddSingleton<IAddable<Customer>, CustomerSvc>();
             builder.Services.AddTransient<IReadable<Customer>, CustomerSvc>();

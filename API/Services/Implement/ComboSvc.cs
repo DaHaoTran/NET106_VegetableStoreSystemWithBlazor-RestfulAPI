@@ -43,7 +43,7 @@ namespace API.Services.Implement
             }
             _dbContext.combos.Remove(find);
             await _dbContext.SaveChangesAsync();
-            return $"Xóa {key} thành công";
+            return $"Xóa {key} thành công !";
         }
 
         public async Task<Combo> EditData(Combo entity)
