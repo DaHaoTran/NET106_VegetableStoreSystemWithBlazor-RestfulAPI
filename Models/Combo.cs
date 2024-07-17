@@ -37,8 +37,9 @@ namespace Models
         [DisplayName("Ảnh")]
         public string Image { get; set; }
 
-        [Required(ErrorMessage = "Phải nhập ngày áp dụng giá mới")]
+        //[Required(ErrorMessage = "Phải nhập ngày áp dụng giá mới")]
         [DisplayName("Giá mới")]
+        [AllowNull]
         public DateTime ApplyDate { get; set; }
 
         [Required(ErrorMessage = "Phải nhập ngày áp dụng giá cũ")]

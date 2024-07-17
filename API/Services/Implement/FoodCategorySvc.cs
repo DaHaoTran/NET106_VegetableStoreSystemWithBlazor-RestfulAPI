@@ -56,10 +56,6 @@ namespace API.Services.Implement
         public async Task<IEnumerable<FoodCategory>> GetListByKey(string key)
         {
             var find = await _dbContext.foodCategories.Where(x => x.CategoryName.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
-            if(find == default)
-            {
-                return null;
-            } 
             return find;
         }
 
