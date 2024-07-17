@@ -5,7 +5,7 @@ using Models;
 
 namespace API.Services.Implement
 {
-    public class GuestSvc : IAddable<Guest>, IDeletable<int, Guest>, ILookupSvc<int, Guest>, IReadable<Guest>
+    public class GuestSvc : IAddable<Guest>, IDeletable<int, Guest>, ILookupSvc<int, Guest>, IReadable<Guest>, ILookupSvc<string, Guest>, ILookupMoreSvc<string, Guest>
     {
         private readonly FastFoodDBContext _dbContext;
         public GuestSvc(FastFoodDBContext dbContext)
@@ -58,6 +58,26 @@ namespace API.Services.Implement
         public async Task<IEnumerable<Guest>> ReadDatas()
         {
             return await _dbContext.guests.ToListAsync();
+        }
+
+        public async Task<Guest> GetDataByKey(string key)
+        {
+            var find = await _dbContext.guests.Where(x => x.PhoneNumber == key).FirstOrDefaultAsync();
+            if(find == default)
+            {
+                return null;
+            }
+            return find;
+        }
+
+        public async Task<IEnumerable<Guest>> GetListByKey(string key)
+        {
+            var find = await _dbContext.guests.Where(x => x.GuestName.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+            if(find == null)
+            {
+                find = await _dbContext.guests.Where(x => x.Address.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+            }
+            return find;
         }
     }
 }

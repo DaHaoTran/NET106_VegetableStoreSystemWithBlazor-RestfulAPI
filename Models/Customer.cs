@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 
@@ -27,6 +28,7 @@ namespace Models
         [Key]
         [Column(TypeName = "Varchar(300)")]
         [AllowNull]
+        [DisplayName("Tên tài khoản")]
         public string UserName { get; set; }
 
         public ICollection<CustomerInformation>? CustomerInformations { get; set; }

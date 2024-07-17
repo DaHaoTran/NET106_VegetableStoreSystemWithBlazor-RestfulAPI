@@ -10,6 +10,7 @@ namespace API.Controllers
     public class CustomerInformationsAPIController : ControllerBase
     {
         private readonly ILookupSvc<int, CustomerInformation> _lookupSvc;
+        private readonly ILookupSvc<string, CustomerInformation> _lookupSvc3;
         private readonly IAddable<CustomerInformation> _addsvc;
         private readonly IReadable<CustomerInformation> _readsvc;
         private readonly IDeletable<int, CustomerInformation> _deletesvc;
@@ -20,10 +21,12 @@ namespace API.Controllers
                 IReadable<CustomerInformation> readsvc,
                 IDeletable<int, CustomerInformation> deletesvc,
                 IEditable<CustomerInformation> editsvc,
-                ILookupMoreSvc<string, CustomerInformation> lookupSvc2)
+                ILookupMoreSvc<string, CustomerInformation> lookupSvc2,
+                ILookupSvc<string, CustomerInformation> lookupSvc3)
         {
             _lookupSvc = lookupSvc;
             _lookupSvc2 = lookupSvc2;
+            _lookupSvc3 = lookupSvc3;
             _addsvc = addsvc;
             _readsvc = readsvc;
             _deletesvc = deletesvc;
@@ -72,15 +75,15 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Lấy một danh sách thông tin khách hàng theo email
+        /// Lấy một danh sách thông tin khách hàng theo email, customerName, address
         /// </summary>
-        /// <param name="email">email</param>
+        /// <param name="related">related information</param>
         /// <response name="404">Không tìm thấy</response>
         /// <returns>Danh sách thông tin khách hàng</returns>
-        [HttpGet("email/{email}")]
-        public async Task<ActionResult<IEnumerable<CustomerInformation>>> GetInformationByEmail(string email)
+        [HttpGet("relatedinformation/{related}")]
+        public async Task<ActionResult<IEnumerable<CustomerInformation>>> GetInformationByInfor(string related)
         {
-            var data = await _lookupSvc2.GetListByKey(email);
+            var data = await _lookupSvc2.GetListByKey(related);
             if(data == null)
             {
                 return NotFound();
@@ -97,6 +100,22 @@ namespace API.Controllers
         public async Task<ActionResult<CustomerInformation>> GetInformationByCode(int id)
         {
             var data = await _lookupSvc.GetDataByKey(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return data;
+        }
+
+        /// <summary>
+        /// Lấy thông tin khách hàng theo phoneNumber
+        /// </summary>
+        /// <param name="phone">phoneNumber</param>
+        /// <returns>Thông tin khách hàng</returns>s
+        [HttpGet("phone/{phone}")]
+        public async Task<ActionResult<CustomerInformation>> GetInformationByPhoneNum(string phone)
+        {
+            var data = await _lookupSvc3.GetDataByKey(phone);
             if (data == null)
             {
                 return NotFound();

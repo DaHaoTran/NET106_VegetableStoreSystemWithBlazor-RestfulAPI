@@ -13,16 +13,22 @@ namespace API.Controllers
         private readonly IAddable<Guest> _addsvc;
         private readonly IDeletable<int, Guest> _deletesvc;
         private readonly ILookupSvc<int, Guest> _lookupsvc;
+        private readonly ILookupSvc<string, Guest> _lookupsvc2;
+        private readonly ILookupMoreSvc<string, Guest> _lookupsvc3;
 
         public GuestsAPIController(IReadable<Guest> readsvc,
             IAddable<Guest> addsvc,
             IDeletable<int, Guest> deletesvc,
-            ILookupSvc<int, Guest> lookupsvc)
+            ILookupSvc<int, Guest> lookupsvc,
+            ILookupSvc<string, Guest> lookupsvc2,
+            ILookupMoreSvc<string, Guest> lookupsvc3)
         {
             _readsvc = readsvc;
             _addsvc = addsvc;
             _deletesvc = deletesvc;
             _lookupsvc = lookupsvc;
+            _lookupsvc2 = lookupsvc2;
+            _lookupsvc3 = lookupsvc3;
         }
 
 
@@ -53,6 +59,40 @@ namespace API.Controllers
                 return NotFound();
             }
             return data;
+        }
+
+        /// <summary>
+        /// Lấy thông tin khách viếng thăm theo phoneNumber
+        /// </summary>
+        /// <param name="phone">phoneNumber</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <returns></returns>
+        [HttpGet("phone/{phone}")]
+        public async Task<ActionResult<Guest>> GetGuestByPhoneNum(string phone)
+        {
+            var data = await _lookupsvc2.GetDataByKey(phone);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return data;
+        }
+
+        /// <summary>
+        /// Lấy thông tin khách viếng thăm theo guestName, address
+        /// </summary>
+        /// <param name="related">related information</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <returns></returns>
+        [HttpGet("relatedinformation/{related}")]
+        public async Task<ActionResult<IEnumerable<Guest>>> GetGuestByInfor(string related)
+        {
+            var data = await _lookupsvc3.GetListByKey(related);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return data.ToList();
         }
 
         /// <summary>

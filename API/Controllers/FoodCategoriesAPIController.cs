@@ -11,13 +11,13 @@ namespace API.ApiController
     {
         private readonly IAddable<FoodCategory> _addsvc;
         private readonly IReadable<FoodCategory> _readsvc;
-        private readonly ILookupSvc<string, FoodCategory> _lookupsvc;
+        private readonly ILookupMoreSvc<string, FoodCategory> _lookupsvc;
         private readonly ILookupSvc<Guid, FoodCategory> _lookupsvc2;
         private readonly IEditable<FoodCategory> _editsvc;
         private readonly IDeletable<Guid, FoodCategory> _deletesvc;
         public FoodCategoriesAPIController(IAddable<FoodCategory> addsvc,
             IReadable<FoodCategory> readsvc,
-            ILookupSvc<string, FoodCategory> lookupsvc,
+            ILookupMoreSvc<string, FoodCategory> lookupsvc,
             ILookupSvc<Guid, FoodCategory> lookupsvc2,
             IEditable<FoodCategory> editsvc,
             IDeletable<Guid, FoodCategory> deletesvc)
@@ -68,14 +68,14 @@ namespace API.ApiController
         /// <response name="200">Tìm thấy</response>
         /// <returns>Phân loại thức ăn</returns>
         [HttpGet("categoryname/{name}")]
-        public async Task<ActionResult<FoodCategory>> GetfoodcategoryByName(string name)
+        public async Task<ActionResult<IEnumerable<FoodCategory>>> GetfoodcategoryByName(string name)
         {
-            var data = await _lookupsvc.GetDataByKey(name);
+            var data = await _lookupsvc.GetListByKey(name);
             if(data == null)
             {
                 return NotFound(); 
             }
-            return data;
+            return data.ToList();
         }
 
         /// <summary>

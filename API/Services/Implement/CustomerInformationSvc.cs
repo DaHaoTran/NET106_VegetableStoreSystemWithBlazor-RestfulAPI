@@ -6,7 +6,7 @@ using DTO;
 
 namespace API.Services.Implement
 {
-    public class CustomerInformationSvc : ILookupSvc<int, CustomerInformation>, ILookupMoreSvc<string , CustomerInformation>, IAddable<CustomerInformation>, IReadable<CustomerInformation>, IDeletable<int, CustomerInformation>, IEditable<CustomerInformation>
+    public class CustomerInformationSvc : ILookupSvc<int, CustomerInformation>, ILookupMoreSvc<string, CustomerInformation>, ILookupSvc<string, CustomerInformation>, IAddable<CustomerInformation>, IReadable<CustomerInformation>, IDeletable<int, CustomerInformation>, IEditable<CustomerInformation>
     {
         private readonly FastFoodDBContext _dbContext;
         public CustomerInformationSvc(FastFoodDBContext dbContext)
@@ -82,6 +82,24 @@ namespace API.Services.Implement
         public async Task<IEnumerable<CustomerInformation>> GetListByKey(string key)
         {
             var find = await _dbContext.customerInformations.Where(x => x.CustomerEmail == key).ToListAsync();
+            if(find == null)
+            {
+                find = await _dbContext.customerInformations.Where(x => x.CustomerName.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+                if(find == null)
+                {
+                    find = await _dbContext.customerInformations.Where(x => x.Address.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+                }
+            }
+            return find;
+        }
+
+        public async Task<CustomerInformation> GetDataByKey(string key)
+        {
+            var find = await _dbContext.customerInformations.Where(x => x.PhoneNumber == key).FirstOrDefaultAsync();
+            if (find == default)
+            {
+                return null;
+            }
             return find;
         }
     }

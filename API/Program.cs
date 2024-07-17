@@ -51,7 +51,7 @@ namespace API
             //FoodCategory
             builder.Services.AddSingleton<IAddable<FoodCategory>, FoodCategorySvc>();
             builder.Services.AddTransient<IReadable<FoodCategory>, FoodCategorySvc>();
-            builder.Services.AddSingleton<ILookupSvc<string, FoodCategory>, FoodCategorySvc>();
+            builder.Services.AddSingleton<ILookupMoreSvc<string, FoodCategory>, FoodCategorySvc>();
             builder.Services.AddSingleton<ILookupSvc<Guid, FoodCategory>, FoodCategorySvc>();
             builder.Services.AddSingleton<IEditable<FoodCategory>, FoodCategorySvc>();
             builder.Services.AddSingleton<IDeletable<Guid, FoodCategory>, FoodCategorySvc>();
@@ -69,6 +69,7 @@ namespace API
             builder.Services.AddSingleton<IDeletable<string, Customer>, CustomerSvc>();
             //CustomerInformation
             builder.Services.AddSingleton<ILookupSvc<int, CustomerInformation>, CustomerInformationSvc>();
+            builder.Services.AddSingleton<ILookupSvc<string, CustomerInformation>, CustomerInformationSvc>();
             builder.Services.AddSingleton<ILookupMoreSvc<string, CustomerInformation>, CustomerInformationSvc>();
             builder.Services.AddSingleton<IAddable<CustomerInformation>, CustomerInformationSvc>();
             builder.Services.AddTransient<IReadable<CustomerInformation>, CustomerInformationSvc>();
@@ -79,6 +80,8 @@ namespace API
             builder.Services.AddSingleton<IAddable<Guest>, GuestSvc>();
             builder.Services.AddSingleton<IDeletable<int, Guest>, GuestSvc>();
             builder.Services.AddSingleton<ILookupSvc<int, Guest>, GuestSvc>();
+            builder.Services.AddSingleton<ILookupSvc<string, Guest>, GuestSvc>();
+            builder.Services.AddSingleton<ILookupMoreSvc<string, Guest>, GuestSvc>();
             //Order
             builder.Services.AddScoped<IReadableHasWhere<string, Order>, OrderSvc>();
             builder.Services.AddTransient<ILookupSvc<int, Order>, OrderSvc>();

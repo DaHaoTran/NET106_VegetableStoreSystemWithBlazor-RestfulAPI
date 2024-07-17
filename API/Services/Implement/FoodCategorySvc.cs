@@ -8,7 +8,7 @@ using DTO;
 
 namespace API.Services.Implement
 {
-    public class FoodCategorySvc : ILookupSvc<string, FoodCategory>, ILookupSvc<Guid, FoodCategory>, IAddable<FoodCategory>, IEditable<FoodCategory>, IDeletable<Guid, FoodCategory>, IReadable<FoodCategory>
+    public class FoodCategorySvc : ILookupSvc<Guid, FoodCategory>, ILookupMoreSvc<string, FoodCategory>, IAddable<FoodCategory>, IEditable<FoodCategory>, IDeletable<Guid, FoodCategory>, IReadable<FoodCategory>
     {
         private readonly FastFoodDBContext _dbContext;
         public FoodCategorySvc(FastFoodDBContext dbContext)
@@ -53,9 +53,9 @@ namespace API.Services.Implement
             return entity;
         }
 
-        public async Task<FoodCategory> GetDataByKey(string key)
+        public async Task<IEnumerable<FoodCategory>> GetListByKey(string key)
         {
-            var find = await _dbContext.foodCategories.Where(x => x.CategoryName == key).FirstOrDefaultAsync()!;
+            var find = await _dbContext.foodCategories.Where(x => x.CategoryName.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
             if(find == default)
             {
                 return null;

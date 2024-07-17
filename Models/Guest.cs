@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
@@ -12,6 +13,8 @@ namespace Models
     public class Guest
     {
         [Key]
+        [DisplayName("Id")]
+        [AllowNull]
         public int GuesId { get; set; }
 
         [MaxLength(500)]
@@ -24,9 +27,11 @@ namespace Models
         [MinLength(10, ErrorMessage = "Số điện thoại chưa đúng"), MaxLength(10, ErrorMessage = "Số điện thoại chưa đúng")]
         public string PhoneNumber { get; set; }
 
+        [DisplayName("Địa chỉ")]
         public string Address { get; set; }
 
         [AllowNull]
+        [DisplayName("Mã đơn")]
         public Guid OrderCode { get; set; }
 
         [ForeignKey("OrderCode")]
