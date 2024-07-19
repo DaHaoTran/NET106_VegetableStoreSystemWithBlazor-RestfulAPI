@@ -43,6 +43,12 @@ namespace DTO
             modelBuilder
             .Entity<Food>()
             .ToTable(tb => tb.HasTrigger("AUTO_SET_SOLD"));
+            modelBuilder
+                .Entity<Cart>()
+                .ToTable(tb => tb.HasTrigger("AUTO_CREATE_CART"));
+            modelBuilder
+              .Entity<Customer>()
+              .ToTable(tb => tb.HasTrigger("AUTO_DELETE_RELATED"));
         }
     }
 }

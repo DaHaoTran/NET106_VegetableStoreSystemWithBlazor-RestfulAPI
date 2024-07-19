@@ -28,7 +28,11 @@ namespace API
                 {
                     Version = "V1",
                     Title = "Tài liệu API dịch vụ kinh doanh thức ăn nhanh trên web",
-                    Description = "localhost: https://localhost:7241/"
+                    Description = "localhost: https://localhost:7241/ \n" +
+                    "Các thao tác sẵn có: \n" +
+                    "- Tự động gán sold = 0 khi thêm mới thức ăn trong table foods database.\n" +
+                    "- Tự động tạo id Cart khi thêm mới tài khoản Khách hàng trong table customers database. \n" +
+                    "- Tự động xóa các thông tin liên quan của tài khoản khách hàng khi xóa khách hàng trong table customers database. \n"
                 });
                 // using System.Reflection;
                 var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -109,7 +113,7 @@ namespace API
             builder.Services.AddTransient<ILoginSvc<Admin>, AdminLoginSvc>();
             builder.Services.AddTransient<ILoginSvc<Customer>, CustomerLoginSvc>();
             //Cart
-            builder.Services.AddTransient<ILookupSvc<string, Cart>, CartSvc>();
+            builder.Services.AddSingleton<ILookupSvc<string, Cart>, CartSvc>();
             //Cart Item
             builder.Services.AddTransient<IAddable<CartItem>, CartItemSvc>();
             builder.Services.AddTransient<IReadableHasWhere<int, CartItem>, CartItemSvc>();

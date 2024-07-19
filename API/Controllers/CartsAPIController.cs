@@ -1,4 +1,4 @@
-﻿using UI.Models;
+﻿using Models;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,10 +15,21 @@ namespace API.Controllers
             _lookupsvc = lookupsvc;
         }
 
-        [HttpGet("{email}")]
-        public async Task<Cart> GetCart(string email)
+        /// <summary>
+        /// Lấy thông tin id giỏ hàng theo email
+        /// </summary>
+        /// <param name="email">email</param>
+        /// <response name="404">Không tìm thấy</response>
+        /// <returns>Thông tin giỏ hàng</returns>
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<Cart>> GetCart(string email)
         {
-           return await _lookupsvc.GetDataByKey(email);
+            var data = await _lookupsvc.GetDataByKey(email);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return data;
         }
     }
 }

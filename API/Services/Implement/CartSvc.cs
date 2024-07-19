@@ -1,26 +1,27 @@
 ﻿using API.Context;
-using UI.Models;
+using Models;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DTO;
 
 namespace API.Services.Implement
 {
     public class CartSvc : ILookupSvc<string, Cart>
     {
-        private readonly FoodShopDBContext _dbContext;
-        public CartSvc(FoodShopDBContext dbContext)
+        private readonly FastFoodDBContext _dbContext;
+        public CartSvc(FastFoodDBContext dbContext)
         {
             _dbContext = dbContext; 
         }
 
-        public Task<Cart> GetDataByKey(string key)
+        public async Task<Cart> GetDataByKey(string key)
         {
-            return _dbContext.cart.Where(x => x.CustomerEmail == key).FirstOrDefaultAsync()!;
-        }
-
-        public Task<Cart> GetDataByString(string str)
-        {
-            throw new NotImplementedException();
+            var find = await _dbContext.carts.Where(x => x.CustomerEmail == key).FirstOrDefaultAsync();
+            if(find == default)
+            {
+                return null;
+            }
+            return find;
         }
     }
 }
