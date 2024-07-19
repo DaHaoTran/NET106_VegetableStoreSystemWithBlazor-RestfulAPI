@@ -15,9 +15,9 @@ namespace API.Services.Implement
 
         private int NewId()
         {
-            int id = _dbContext.customerInformations.Count() + 1;
+            int id = _dbContext.comboDetails.Count() + 1;
             int count = 0;
-            while (_dbContext.customerInformations.Any(x => x.CInforId == id))
+            while (_dbContext.comboDetails.Any(x => x.Id == id))
             {
                 count++;
                 id += count;

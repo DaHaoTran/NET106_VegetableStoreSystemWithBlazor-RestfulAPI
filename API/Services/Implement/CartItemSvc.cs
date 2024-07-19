@@ -1,70 +1,66 @@
 ﻿using API.Context;
-using UI.Models;
+using Models;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using DTO;
 
 namespace API.Services.Implement
 {
-    public class CartItemSvc : IAddable<CartItem>, IReadableHasWhere<int, CartItem>, IDeletable<List<CartItem>, CartItem>, IEditable<CartItem>
+    public class CartItemSvc : IAddable<CartItem>, IDeletable<int, CartItem>, IEditable<CartItem>, ILookupMoreSvc<int, CartItem>
     {
-        private readonly FoodShopDBContext _dbContext;
-        public CartItemSvc(FoodShopDBContext dbContext)
+        private readonly FastFoodDBContext _dbContext;
+        public CartItemSvc(FastFoodDBContext dbContext)
         {
             _dbContext = dbContext; 
         }
-        public async Task<bool> AddNewData(CartItem entity)
+
+        private int NewId()
         {
-            try
+            int id = _dbContext.cartItems.Count() + 1;
+            int count = 0;
+            while (_dbContext.cartItems.Any(x => x.ItemId == id))
             {
-                await _dbContext.cartItem.AddAsync(entity);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            } catch
-            {
-                return false;
+                count++;
+                id += count;
             }
+            return id;
         }
 
-        public async Task<bool> DeleteData(List<CartItem> items)
+        public async Task<CartItem> AddNewData(CartItem entity)
         {
-            try
-            {
-                if (items != null)
-                {
-                    _dbContext.cartItem.RemoveRange(items);
-                    await _dbContext.SaveChangesAsync();
-                    return true;
-                } else
-                {
-                    return false;
-                }
-            } catch
-            {
-                return false;
-            }
+            entity.ItemId = NewId();
+            await _dbContext.cartItems.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public async Task<bool> EditData(CartItem entity)
+        public async Task<string> DeleteData(int key)
         {
-            try
+            var find = await _dbContext.cartItems.Where(x => x.ItemId == key).FirstOrDefaultAsync();
+            if(find == default)
             {
-                var item = await _dbContext.cartItem.Where(x => x.CartId == entity.CartId).FirstOrDefaultAsync();
-                item!.Quantity = entity.Quantity;
-                item.CartId = entity.CartId;
-                item.FoodCode = entity.FoodCode;
-                await _dbContext.SaveChangesAsync();
-                return true;
-            } catch
-            {
-                return false;
+                return "Không tìm thấy";
             }
-
+            return $"Xóa {key} thành công !";
         }
 
-        public async  Task<IEnumerable<CartItem>> ReadDatasHasW(int key)
+        public async Task<CartItem> EditData(CartItem entity)
         {
-            return await _dbContext.cartItem.Where(x => x.CartId == key).ToListAsync();
+            var find = await _dbContext.cartItems.Where(x => x.ItemId == entity.ItemId).FirstOrDefaultAsync(); 
+            if(find == default)
+            {
+                return null;
+            }
+            find.Quantity = entity.Quantity;
+            await _dbContext.SaveChangesAsync();
+            return entity;
+        }
+
+        public async Task<IEnumerable<CartItem>> GetListByKey(int key)
+        {
+            var find = await _dbContext.cartItems.Where(x => x.CartId == key).ToListAsync();
+            return find;
         }
     }
 }

@@ -115,10 +115,10 @@ namespace API
             //Cart
             builder.Services.AddSingleton<ILookupSvc<string, Cart>, CartSvc>();
             //Cart Item
-            builder.Services.AddTransient<IAddable<CartItem>, CartItemSvc>();
-            builder.Services.AddTransient<IReadableHasWhere<int, CartItem>, CartItemSvc>();
-            builder.Services.AddTransient<IDeletable<List<CartItem>, CartItem>, CartItemSvc>();
-            builder.Services.AddTransient<IEditable<CartItem>, CartItemSvc>();
+            builder.Services.AddSingleton<IAddable<CartItem>, CartItemSvc>();
+            builder.Services.AddSingleton<IDeletable<int, CartItem>, CartItemSvc>();
+            builder.Services.AddSingleton<IEditable<CartItem>, CartItemSvc>();
+            builder.Services.AddSingleton<ILookupMoreSvc<int, CartItem>, CartItemSvc>();
 
             var app = builder.Build();
 
