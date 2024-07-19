@@ -107,8 +107,8 @@ namespace API
             builder.Services.AddTransient<IEditable<Order> , OrderSvc>();
             builder.Services.AddTransient<IAddable<Order>, OrderSvc>();
             //OrderItem
-            builder.Services.AddScoped<IReadableHasWhere<int, OrderItem>, OrderItemSvc>();
-            builder.Services.AddTransient<IAddable<OrderItem>, OrderItemSvc>();
+            builder.Services.AddSingleton<IAddable<List<OrderItem>>, OrderItemSvc>();
+            builder.Services.AddSingleton<ILookupMoreSvc<Guid, OrderItem> , OrderItemSvc>();
             //Login
             builder.Services.AddTransient<ILoginSvc<Admin>, AdminLoginSvc>();
             builder.Services.AddTransient<ILoginSvc<Customer>, CustomerLoginSvc>();

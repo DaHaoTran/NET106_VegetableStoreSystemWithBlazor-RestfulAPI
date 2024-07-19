@@ -41,7 +41,7 @@ namespace API.Controllers
         /// </example>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> PostItem(CartItem item)
+        public async Task<IActionResult> PostItem([FromBody] CartItem item)
         {
             var data = await _addsvc.AddNewData(item);
             return Created();
@@ -88,7 +88,7 @@ namespace API.Controllers
         /// <response name="202">Thành công</response>
         /// <returns>Thức ăn trong giỏ hàng đã chỉnh sửa</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutItem(int id, CartItem item)
+        public async Task<IActionResult> PutItem(int id, [FromBody] CartItem item)
         {
             if (id != item.ItemId)
             {

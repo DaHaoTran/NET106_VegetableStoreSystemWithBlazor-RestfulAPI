@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Models
 {
@@ -18,9 +19,9 @@ namespace Models
         [ForeignKey("OrderCode")]
         public virtual Order? Order { get; set; }
 
-        public Guid Code { get; set; }
+        public Guid FoodCode { get; set; }
 
-        [ForeignKey("Code")]
+        [ForeignKey("FoodCode")]
         public virtual Food? Food { get; set; }
     }
 }

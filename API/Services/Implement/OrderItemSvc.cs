@@ -1,33 +1,29 @@
 ﻿using API.Context;
-using UI.Models;
+using Models;
 using API.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DTO;
 
 namespace API.Services.Implement
 {
-    public class OrderItemSvc : IReadableHasWhere<int, OrderItem>, IAddable<OrderItem>
+    public class OrderItemSvc : IAddable<List<OrderItem>>, ILookupMoreSvc<Guid, OrderItem>
     {
-        private readonly FoodShopDBContext _dbContext;
-        public OrderItemSvc(FoodShopDBContext dbContext) {
+        private readonly FastFoodDBContext _dbContext;
+        public OrderItemSvc(FastFoodDBContext dbContext) {
             _dbContext = dbContext;
         }
 
-        public async Task<bool> AddNewData(OrderItem entity)
+        public async Task<List<OrderItem>> AddNewData(List<OrderItem> entity)
         {
-            try
-            {
-                await _dbContext.orderItem.AddAsync(entity);
-                await _dbContext.SaveChangesAsync();
-                return true;
-            } catch
-            {
-                return false;
-            }
+            await _dbContext.orderItems.AddRangeAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public async Task<IEnumerable<OrderItem>> ReadDatasHasW(int key)
+        public async Task<IEnumerable<OrderItem>> GetListByKey(Guid key)
         {
-            return await _dbContext.orderItem.Where(x => x.OrderId == key).ToListAsync();
+            var find = await _dbContext.orderItems.Where(x => x.OrderCode == key).ToListAsync();
+            return find;
         }
     }
 }
