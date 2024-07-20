@@ -51,6 +51,9 @@ namespace DTO
             modelBuilder
               .Entity<Customer>()
               .ToTable(tb => tb.HasTrigger("AUTO_DELETE_RELATED"));
+            modelBuilder
+              .Entity<OrderItem>()
+              .ToTable(tb => tb.HasTrigger("DECREASE_QUANTITY_FOOD"));
         }
     }
 }
