@@ -123,7 +123,7 @@ namespace API.Controllers
         /// </example>
         /// <response Code="404">Không tìm thấy</response>
         /// <response Code="201">Thành công</response>
-        /// <response name="403">Email bị trùng</response>
+        /// <response Code="403">Email bị trùng</response>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostAdmin([FromBody] Admin admin)

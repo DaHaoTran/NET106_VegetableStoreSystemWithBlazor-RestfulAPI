@@ -51,7 +51,7 @@ namespace API.Controllers
         /// Lấy danh sách trong giỏ hàng theo id giỏ hàng
         /// </summary>
         /// <param name="id">cartId</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns>Danh sách giỏ hàng</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<CartItem>>> GetItems(int id)
@@ -84,8 +84,8 @@ namespace API.Controllers
         /// Chỉnh sửa một thức ăn trong giỏ hàng theo id
         /// </summary>
         /// <param name="id">itemId</param>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="202">Thành công</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="202">Thành công</response>
         /// <returns>Thức ăn trong giỏ hàng đã chỉnh sửa</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutItem(int id, [FromBody] CartItem item)

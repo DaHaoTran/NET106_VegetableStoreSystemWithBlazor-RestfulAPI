@@ -31,8 +31,8 @@ namespace API.Controllers
         /// <summary>
         /// Lấy danh sách khách hàng
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Danh sách khách hàng</returns>
         [HttpGet]
         public async Task<IEnumerable<Customer>> GetCustomers()
@@ -44,8 +44,8 @@ namespace API.Controllers
         /// Lấy thông tin khách hàng theo email
         /// </summary>
         /// <param name="email">email</param>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Thông tin khách hàng</returns>
         [HttpGet("{email}")]
         public async Task<ActionResult<Customer>> GetcustomerByEmail(string email)
@@ -61,8 +61,8 @@ namespace API.Controllers
         /// <summary>
         /// Chỉnh sửa một khách hàng được chọn theo email
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="202">Thành công</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="202">Thành công</response>
         /// <param name="email">email</param>
         /// <returns>Khách hàng đã chỉnh sửa</returns>
         [HttpPut("{email}")]
@@ -89,8 +89,8 @@ namespace API.Controllers
         ///     "passWord": "Abc123"
         /// }
         /// </example>
-        /// <response name="404">Email đã được sử dụng</response>
-        /// <response name="201">Thành công</response>
+        /// <response Code="404">Email đã được sử dụng</response>
+        /// <response Code="201">Thành công</response>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostCustomer([FromBody] Customer cus)
@@ -107,7 +107,7 @@ namespace API.Controllers
         /// Xóa một khách hàng
         /// </summary>
         /// <param name="email">email</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>
         [HttpDelete("{email}")]
         public async Task<IActionResult> DeleteCustomer(string email)

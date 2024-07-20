@@ -19,7 +19,7 @@ namespace API.Controllers
         /// Lấy thông tin id giỏ hàng theo email
         /// </summary>
         /// <param name="email">email</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns>Thông tin giỏ hàng</returns>
         [HttpGet("email/{email}")]
         public async Task<ActionResult<Cart>> GetCart(string email)

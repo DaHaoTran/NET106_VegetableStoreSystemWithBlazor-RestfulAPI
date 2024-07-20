@@ -35,8 +35,8 @@ namespace API.Controllers
         /// <summary>
         /// Lấy danh sách combo
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Danh sách combo</returns>
         [HttpGet]
         public async Task<IEnumerable<Combo>> GetCombos()
@@ -48,7 +48,7 @@ namespace API.Controllers
         /// Lấy thông tin combo theo comboCode
         /// </summary>
         /// <param name="code">comboCode</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns>Thông tin combo</returns>
         [HttpGet("{code}")]
         public async Task<ActionResult<Combo>> GetComboByCode(Guid code)
@@ -65,7 +65,7 @@ namespace API.Controllers
         /// Lấy thông tin combo theo comboName
         /// </summary>
         /// <param name="name">comboName</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns>Thông tin combo</returns>
         [HttpGet("name/{name}")]
         public async Task<ActionResult<IEnumerable<Combo>>> GetComboByName(string name)
@@ -89,8 +89,8 @@ namespace API.Controllers
         ///     "expDate: "30/08/2024 12:48:32 CH"
         /// }
         /// </example>
-        /// <response name="403">comboName đã được sử dụng</response>
-        /// <resposne name="201">Thành công</resposne>
+        /// <response Code="403">comboName đã được sử dụng</response>
+        /// <resposne Code="201">Thành công</resposne>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostCombo([FromBody] Combo combo)
@@ -107,8 +107,8 @@ namespace API.Controllers
         /// Sửa một combo được chọn theo comboCode
         /// </summary>
         /// <param name="code">comboCode</param>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="202">Thành công</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="202">Thành công</response>
         /// <returns>Combo đã chỉnh sửa</returns>
         [HttpPut("{code}")]
         public async Task<IActionResult> PutCombo(Guid code, [FromBody] Combo combo)
@@ -129,7 +129,7 @@ namespace API.Controllers
         /// Xóa một combo
         /// </summary>
         /// <param name="code">comboCode</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>
         [HttpDelete("{code}")]
         public async Task<IActionResult> DeleteCombo(Guid code)

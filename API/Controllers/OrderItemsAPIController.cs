@@ -43,7 +43,7 @@ namespace API.Controllers
         ///     ...
         /// ]
         /// </example>
-        /// <response name="201">Thành công</response>
+        /// <response Code="201">Thành công</response>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostItems([FromBody] List<OrderItem> items)
@@ -56,7 +56,7 @@ namespace API.Controllers
         /// Lấy danh sách thức ăn đã đặt theo mã đặt 
         /// </summary>
         /// <param name="code">orderCode</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns>Danh sách thức ăn đã đặt</returns>
         [HttpGet("{code}")]
         public async Task<ActionResult<IEnumerable<OrderItem>>> GetItemsByCode(Guid code)

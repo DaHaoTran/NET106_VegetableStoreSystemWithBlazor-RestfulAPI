@@ -35,8 +35,8 @@ namespace API.ApiController
         /// <summary>
         /// Lấy danh sách thức ăn
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Danh sách thức ăn</returns>
         [HttpGet]
         public async Task<IEnumerable<Food>> Getfoods()
@@ -48,7 +48,7 @@ namespace API.ApiController
         /// Lấy thông tin thức ăn theo foodCode
         /// </summary>
         /// <param name="code">foodCode</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns>Thông tin thức ăn</returns>
         [HttpGet("{code}")]
         public async Task<ActionResult<Food>> GetfoodByCode(Guid code)
@@ -65,7 +65,7 @@ namespace API.ApiController
         /// Lấy thông tin thức ăn theo foodName
         /// </summary>
         /// <param name="key">foodName</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns>Thông tin thức ăn</returns>
         [HttpGet("name/{name}")]
         public async Task<ActionResult<IEnumerable<Food>>> GetFoodByName(string name)
@@ -81,8 +81,8 @@ namespace API.ApiController
         /// <summary>
         /// Chỉnh sửa một thức ăn theo foodCode
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="202">Thành công</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="202">Thành công</response>
         /// <returns>Thức ăn đã chỉnh sửa</returns>
         [HttpPut("{code}")]
         public async Task<IActionResult> PutFood(Guid code, [FromBody] Food food)
@@ -117,8 +117,8 @@ namespace API.ApiController
         ///     "adminCode": "..." (mã quản trị)
         /// }
         /// </example>
-        /// <response name="403">foodName đã tồn tại</response>
-        /// <response name="201">Thành công</response>
+        /// <response Code="403">foodName đã tồn tại</response>
+        /// <response Code="201">Thành công</response>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostFood([FromBody] Food food)
@@ -135,7 +135,7 @@ namespace API.ApiController
         /// Xóa một thức ăn
         /// </summary>
         /// <param name="code">foodCode</param>
-        /// <response name="200">Thành công</response>
+        /// <response Code="200">Thành công</response>
         /// <returns></returns>
         [HttpDelete("{code}")]
         public async Task<IActionResult> DeleteFood(Guid code)

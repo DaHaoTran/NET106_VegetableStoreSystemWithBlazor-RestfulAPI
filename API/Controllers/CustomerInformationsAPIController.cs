@@ -48,8 +48,8 @@ namespace API.Controllers
         ///     "customerEmail": "..." (email tài khoản khách hàng đã tạo)
         ///  }
         /// </example>
-        /// <response name="404">Không tìm thấy tài khoản có email trùng khớp</response>
-        /// <response name="201">Thành công</response>
+        /// <response Code="404">Không tìm thấy tài khoản có email trùng khớp</response>
+        /// <response Code="201">Thành công</response>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostInformation([FromBody] CustomerInformation information)
@@ -65,8 +65,8 @@ namespace API.Controllers
         /// <summary>
         /// Lấy danh sách thông tin khách hàng
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Danh sách thông tin khách hàng</returns>
         [HttpGet]
         public async Task<IEnumerable<CustomerInformation>> GetInformations()
@@ -78,7 +78,7 @@ namespace API.Controllers
         /// Lấy một danh sách thông tin khách hàng theo email, customerName, address
         /// </summary>
         /// <param name="related">related information</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns>Danh sách thông tin khách hàng</returns>
         [HttpGet("relatedinformation/{related}")]
         public async Task<ActionResult<IEnumerable<CustomerInformation>>> GetInformationByInfor(string related)
@@ -127,8 +127,8 @@ namespace API.Controllers
         /// Sửa một thông tin khách hàng theo id
         /// </summary>
         /// <param name="id">cInforId</param>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="202">Thành công</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="202">Thành công</response>
         /// <returns>Thông tin khách hàng đã sửa</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutInformation(int id, [FromBody] CustomerInformation information)

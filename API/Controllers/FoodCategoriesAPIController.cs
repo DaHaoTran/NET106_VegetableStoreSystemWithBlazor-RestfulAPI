@@ -33,8 +33,8 @@ namespace API.ApiController
         /// <summary>
         /// Lấy danh sách phân loại thức ăn
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Danh sách phân loại thức ăn</returns>
         [HttpGet]
         public async Task<IEnumerable<FoodCategory>> GetFoodCategories()
@@ -46,8 +46,8 @@ namespace API.ApiController
         /// Lấy thông tin phân loại thức ăn theo fCategoryCode
         /// </summary>
         /// <param name="code">fCategoryCode</param>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Phân loại thức ăn</returns>
         [HttpGet("{code}")]
         public async Task<ActionResult<FoodCategory>> GetfoodcategoryByCode(Guid code)
@@ -64,8 +64,8 @@ namespace API.ApiController
         /// Lấy thông tin phân loại thức ăn theo categoryName
         /// </summary>
         /// <param name="name">categoryName</param>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Phân loại thức ăn</returns>
         [HttpGet("categoryname/{name}")]
         public async Task<ActionResult<IEnumerable<FoodCategory>>> GetfoodcategoryByName(string name)
@@ -81,8 +81,8 @@ namespace API.ApiController
         /// <summary>
         /// Chỉnh sửa một loại thức ăn được chọn theo fCategoryCode
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="202">Thành công</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="202">Thành công</response>
         /// <param name="code">fCategoryCode</param>
         /// <returns>Thức ăn được chỉnh sửa</returns>
         [HttpPut("{code}")]
@@ -108,9 +108,9 @@ namespace API.ApiController
         ///     "categoryName": "Snacks"
         /// }
         /// </example>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="403">categoryName bị trùng</response>
-        /// <response name="201">Thành công</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="403">categoryName bị trùng</response>
+        /// <response Code="201">Thành công</response>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostFoodcategory([FromBody] FoodCategory fcate)
@@ -127,7 +127,7 @@ namespace API.ApiController
         /// Xóa một loại thức ăn
         /// </summary>
         /// <param name="code">fCategoryCode</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>
         [HttpDelete("{code}")]
         public async Task<IActionResult> DeleteFoodcategory(Guid code)

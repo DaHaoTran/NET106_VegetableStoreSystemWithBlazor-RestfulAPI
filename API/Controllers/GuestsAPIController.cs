@@ -35,8 +35,8 @@ namespace API.Controllers
         /// <summary>
         /// Lấy danh sách khách viếng thăm
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Danh sách khách viếng thăm</returns>
         [HttpGet]
         public async Task<IEnumerable<Guest>> GetGuests()
@@ -48,7 +48,7 @@ namespace API.Controllers
         /// Lấy thông tin khách viếng thăm theo id
         /// </summary>
         /// <param name="id">id</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Guest>> GetGuestById(int id)
@@ -65,7 +65,7 @@ namespace API.Controllers
         /// Lấy thông tin khách viếng thăm theo phoneNumber
         /// </summary>
         /// <param name="phone">phoneNumber</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>
         [HttpGet("phone/{phone}")]
         public async Task<ActionResult<Guest>> GetGuestByPhoneNum(string phone)
@@ -82,7 +82,7 @@ namespace API.Controllers
         /// Lấy thông tin khách viếng thăm theo guestName, address
         /// </summary>
         /// <param name="related">related information</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>
         [HttpGet("relatedinformation/{related}")]
         public async Task<ActionResult<IEnumerable<Guest>>> GetGuestByInfor(string related)
@@ -110,7 +110,7 @@ namespace API.Controllers
         ///     "orderCode": "..." (mã đơn hàng của khách hàng đặt)
         /// }
         /// </example>
-        /// <response name="201">Thành công</response>
+        /// <response Code="201">Thành công</response>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostGuest([FromBody] Guest guest)

@@ -31,8 +31,8 @@ namespace API.Controllers
         /// <summary>
         /// Lấy danh sách chi tiết combo
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="200">Tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
         /// <returns>Danh sách chi tiết combo</returns>
         [HttpGet]
         public async Task<IEnumerable<ComboDetail>> GetDetails()
@@ -70,8 +70,8 @@ namespace API.Controllers
         ///     "comboCode: "..." (mã combo)
         /// }
         /// </example>
-        /// <response name="403">comboCode có foodCode này đã tồn tại</response>
-        /// <response name="201">Thành công</response>
+        /// <response Code="403">comboCode có foodCode này đã tồn tại</response>
+        /// <response Code="201">Thành công</response>
         /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostDetails([FromBody] ComboDetail detail) 
@@ -87,8 +87,8 @@ namespace API.Controllers
         /// <summary>
         /// Sửa một chi tiết combo được chọn theo Id
         /// </summary>
-        /// <response name="404">Không tìm thấy</response>
-        /// <response name="202">Thành công</response>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="202">Thành công</response>
         /// <returns>Chi tiết Combo đã chỉnh sửa</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDetails(int id, [FromBody] ComboDetail detail)
@@ -109,7 +109,7 @@ namespace API.Controllers
         /// Xóa một chi tiết combo
         /// </summary>
         /// <param name="id">Id</param>
-        /// <response name="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>
         [HttpDelete("id")]
         public async Task<IActionResult> DeleteDetails(int id)
