@@ -102,10 +102,11 @@ namespace API
             builder.Services.AddSingleton<ILookupSvc<string, Guest>, GuestSvc>();
             builder.Services.AddSingleton<ILookupMoreSvc<string, Guest>, GuestSvc>();
             //Order
-            builder.Services.AddScoped<IReadableHasWhere<string, Order>, OrderSvc>();
-            builder.Services.AddTransient<ILookupSvc<int, Order>, OrderSvc>();
-            builder.Services.AddTransient<IEditable<Order> , OrderSvc>();
-            builder.Services.AddTransient<IAddable<Order>, OrderSvc>();
+            builder.Services.AddSingleton<IDeletable<Guid, Order>, OrderSvc>();
+            builder.Services.AddSingleton<ILookupMoreSvc<string, Order>, OrderSvc>();
+            builder.Services.AddTransient<IReadable<Order>, OrderSvc>();
+            builder.Services.AddSingleton<IEditable<Order> , OrderSvc>();
+            builder.Services.AddSingleton<IAddable<Order>, OrderSvc>();
             //OrderItem
             builder.Services.AddSingleton<IAddable<List<OrderItem>>, OrderItemSvc>();
             builder.Services.AddSingleton<ILookupMoreSvc<Guid, OrderItem> , OrderItemSvc>();

@@ -1,4 +1,4 @@
-﻿using UI.Models;
+﻿using Models;
 using API.Services.Implement;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -10,84 +10,108 @@ namespace API.Controllers
     [ApiController]
     public class OrdersAPIController : ControllerBase
     {
-        private readonly IReadableHasWhere<string, Order> _readwsvc;
-        private readonly ILookupSvc<int, Order> _lookupSvc;
+        private readonly ILookupMoreSvc<string, Order> _lookupSvc;
         private readonly IEditable<Order> _editsvc;
-        private readonly ILookupSvc<int, CustomerInformation> _cuslookupsvc;
-        private readonly IReadableHasWhere<int, OrderItem> _orderIreadsvc;
+        private readonly IReadable<Order> _readsvc;
         private readonly IAddable<Order> _addsvc;
-        public OrdersAPIController(IReadableHasWhere<string, Order> readwsvc,
-            ILookupSvc<int, Order> lookupsvc,
+        private readonly IDeletable<Guid, Order> _deletesvc; 
+        public OrdersAPIController(IReadable<Order> readsvc,
+            ILookupMoreSvc<string, Order> lookupsvc,
             IEditable<Order> editsvc,
-            ILookupSvc<int, CustomerInformation> cuslookupsvc,
-            IReadableHasWhere<int, OrderItem> orderIreadsvc,
+            IDeletable<Guid, Order> deletesvc,
             IAddable<Order> addsvc) 
         {
-            _readwsvc = readwsvc;
+            _readsvc = readsvc;
             _lookupSvc = lookupsvc;
             _editsvc = editsvc;
-            _cuslookupsvc = cuslookupsvc;
-            _orderIreadsvc = orderIreadsvc;
+            _deletesvc = deletesvc;  
             _addsvc = addsvc;
         }
 
-        // GET: api/orders/state
-        [HttpGet("{state}")]
+        /// <summary>
+        /// Lấy danh sách đơn đặt 
+        /// </summary>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="200">Tìm thấy</response>
+        /// <returns>Danh sách đơn đặt</returns>
+        [HttpGet]
         public async Task<IEnumerable<Order>> Getorders(string state)
         {
-            return await _readwsvc.ReadDatasHasW(state);
+            return await _readsvc.ReadDatas();
         }
 
-        // GET: api/orders/address/5
-        [HttpGet("address/{id}")]
-        public async Task<ActionResult<CustomerInformation>> GetAddress(int id)
+        /// <summary>
+        /// Lấy thông tin đơn hàng theo email
+        /// </summary>
+        /// <param name="email">email</param>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <returns>Thông tin đơn hàng</returns>
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetOrdersByEmail(string email)
         {
-            var address = await _cuslookupsvc.GetDataByKey(id);
-            return address;
-        }
-
-        // GET: api/orders/items/5
-        [HttpGet("items/{id}")]
-        public async Task<IEnumerable<OrderItem>> GetItems(int id)
-        {
-            return await _orderIreadsvc.ReadDatasHasW(id);
-        }
-
-        // PUT: api/orders/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<bool> PutOrder(int id, Order order)
-        {
-            bool done = false;
-            if (id != order.OrderId)
+            var data = await _lookupSvc.GetListByKey(email);
+            if (data == null)
             {
-                return false;
+                return NotFound();
             }
-            else
-            {
-                done = await _editsvc.EditData(order);
-            }
-            return done;
+            return data.ToList();
         }
 
-        // GET: api/orders/string/email
-        [HttpGet("string/{email}")]
-        public async Task<ActionResult<Order>> GetOrderByString(string email)
-        {
-            var order = await _lookupSvc.GetDataByString(email);
-            return order;
-        }
-
-        [HttpGet("int/{id}")]
-        public async Task<ActionResult<Order>> GetOrderById(int id)
-        {
-            return await _lookupSvc.GetDataByKey(id);
-        }
-
+        /// <summary>
+        /// Thêm một đơn hàng mới
+        /// </summary>
+        /// <remarks>
+        /// Lưu ý:
+        /// Hãy có một customerInformation trong customerInformations (table database) trước khi thực hiện thêm mới này
+        /// Hãy có một customer trong customers (table database) trước khi thực hiện thêm mới này
+        /// </remarks>
+        /// <example>
+        /// {
+        ///     "state": "Not Delivered",
+        ///     "comment": "test data",
+        ///     "paymentMethod": "Thanh toán khi nhận hàng",
+        ///     "total": "200000",
+        ///     "cInforId": "..." (mã địa chỉ khách hàng),
+        ///     "customerEmail": "..." (email tài khoản khách hàng)
+        /// }
+        /// </example>
+        /// <response Code="201">Thành công</response>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<bool>> PostOrder(Order order)
+        public async Task<IActionResult> PostOrder([FromBody] Order order)
         {
-            return await _addsvc.AddNewData(order);
-        } 
+            var data = await _addsvc.AddNewData(order);
+            return Created();
+        }
+
+        /// <summary>
+        /// Chỉnh sửa trạng thái đơn hàng theo mã đơn hàng
+        /// </summary>
+        /// <param name="code">orderCode</param>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="202">Thành công</response>
+        /// <returns>Đơn hàng đã chỉnh sửa</returns>
+        [HttpPut("{code}")]
+        public async Task<IActionResult> PutOrder(Guid code, [FromBody] Order order)
+        {
+            var data = await _editsvc.EditData(order);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return Accepted(data);
+        }
+
+        /// <summary>
+        /// Xóa một đơn hàng 
+        /// </summary>
+        /// <param name="code">orderCode</param>
+        /// <returns></returns>
+        [HttpDelete]
+        public async Task<IActionResult> DeleteOrder(Guid code)
+        {
+            var data = await _deletesvc.DeleteData(code);
+            return Ok(data);
+        }
     }
 }

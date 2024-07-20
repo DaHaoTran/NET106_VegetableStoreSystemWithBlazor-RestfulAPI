@@ -7,7 +7,7 @@ using DTO;
 
 namespace API.Services.Implement
 {
-    public class OrderSvc : IAddable<Order>, IDeletable<Guid, Order>, ILookupMoreSvc<string, Order>, IReadable<Order>
+    public class OrderSvc : IAddable<Order>, IDeletable<Guid, Order>, ILookupMoreSvc<string, Order>, IReadable<Order>, IEditable<Order>
     {
         private readonly FastFoodDBContext _dbContext;
         public OrderSvc(FastFoodDBContext dbContext)
@@ -15,25 +15,6 @@ namespace API.Services.Implement
             _dbContext = dbContext;
         }
 
-        /// <summary>
-        /// Thêm một đơn hàng mới
-        /// </summary>
-        /// <remarks>
-        /// Lưu ý:
-        /// Hãy có một customerInformation trong customerInformations (table database) trước khi thực hiện thêm mới này
-        /// Hãy có một customer trong customers (table database) trước khi thực hiện thêm mới này
-        /// </remarks>
-        /// <example>
-        /// {
-        ///     "state": "Not Delivered",
-        ///     "comment": "test data",
-        ///     "paymentMethod": "Thanh toán khi nhận hàng",
-        ///     "total": "200000",
-        ///     "cInforId": "..." (mã địa chỉ khách hàng),
-        ///     "customerEmail": "..." (email tài khoản khách hàng)
-        /// }
-        /// </example>
-        /// <returns></returns>
         public async Task<Order> AddNewData(Order entity)
         {
             Task t = Task.Run(() =>
@@ -47,11 +28,6 @@ namespace API.Services.Implement
             return entity;
         }
 
-        /// <summary>
-        /// Xóa một đơn hàng 
-        /// </summary>
-        /// <param name="key">orderCode</param>
-        /// <returns></returns>
         public async Task<string> DeleteData(Guid key)
         {
             var find = await _dbContext.orders.Where(x => x.OrderCode == key).FirstOrDefaultAsync();
@@ -64,15 +40,27 @@ namespace API.Services.Implement
             return $"Xóa {key} thành công !";
         }
 
-        /// <summary>
-        /// Lấy thông tin đơn hàng qua email
-        /// </summary>
-        /// <param name="key">email</param>
-        /// <returns>Thông tin đơn hàng</returns>
+        public async Task<Order> EditData(Order entity)
+        {
+            var find = await _dbContext.orders.Where(x => x.OrderCode == entity.OrderCode).FirstOrDefaultAsync();
+            if(find == default)
+            {
+                return null;
+            }
+            find.State = entity.State;
+            await _dbContext.SaveChangesAsync();
+            return find;
+        }
+
         public async Task<IEnumerable<Order>> GetListByKey(string key)
         {
             var find = await _dbContext.orders.Where(x => x.CustomerEmail == key).ToListAsync();
             return find;
+        }
+       
+        public async Task<IEnumerable<Order>> ReadDatas()
+        {
+            return await _dbContext.orders.ToListAsync();
         }
     }
 }
