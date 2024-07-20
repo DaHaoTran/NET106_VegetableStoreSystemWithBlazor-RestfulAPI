@@ -8,7 +8,7 @@ namespace API.Services.Implement
 {
     public class ComboSvc : IAddable<Combo>, IEditable<Combo>, IDeletable<Guid, Combo>, IReadable<Combo>, ILookupSvc<Guid, Combo>, ILookupMoreSvc<string, Combo>
     {
-        private FastFoodDBContext _dbContext;
+        private readonly FastFoodDBContext _dbContext;
         public ComboSvc(FastFoodDBContext dbContext)
         {
             _dbContext = dbContext;
