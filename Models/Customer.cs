@@ -13,7 +13,6 @@ namespace Models
         [EmailAddress(ErrorMessage = "Email phải đúng định dạng")]
         public string Email { get; set; }
 
-        [Key]
         [Column(TypeName = "Varchar(100)")]
         [Required(ErrorMessage = "Phải nhập password")]
         [RegularExpression(@"^(?=.*[A-Z])(?=.*\d).{5,}$", ErrorMessage = "Password phải chứa 5 ký tự trở lên bao gồm ít nhất 1 số và 1 chữ cái viết hoa !")]
@@ -25,7 +24,6 @@ namespace Models
         //[Compare(nameof(PassWord), ErrorMessage = "Confirm password is not same password")]
         //public string ConfirmPassWord { get; set; }
 
-        [Key]
         [Column(TypeName = "Varchar(300)")]
         [AllowNull]
         [DisplayName("Tên tài khoản")]

@@ -17,7 +17,6 @@ namespace Models
         [DisplayName("Mã combo")]
         public Guid ComboCode { get; set; }
 
-        [Key]
         [MaxLength(300)]
         [Required(ErrorMessage = "Phải nhập tên combo")]
         [DisplayName("Tên combo")]

@@ -11,7 +11,6 @@ namespace Models
         [AllowNull]
         public Guid FoodCode { get; set; }
 
-        [Key]
         [MaxLength(300)]
         [Required(ErrorMessage = "Phải nhập tên thức ăn")]
         [DisplayName("Tên thức ăn")]

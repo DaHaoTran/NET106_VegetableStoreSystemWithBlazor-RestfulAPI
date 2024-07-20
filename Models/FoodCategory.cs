@@ -12,7 +12,6 @@ namespace Models
         [DisplayName("Mã phân loại")]
         public Guid FCategoryCode { get; set; }
 
-        [Key]
         [MaxLength(200)]
         [Required(ErrorMessage = "Phải nhập tên phân loại")]
         [DisplayName("Tên phân loại")]
