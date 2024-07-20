@@ -1,11 +1,11 @@
 ﻿using API.Services.Interfaces;
-using UI.Models;
+using Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/login/admins")]
+    [Route("api/admins")]
     [ApiController]
     public class LoginAdminAPIController : ControllerBase
     {
@@ -15,24 +15,36 @@ namespace API.Controllers
             _loginSvc = loginSvc;
         }
 
-        // api/login/admins
-        [HttpPut]
-        public async Task<bool> LoginAdmin(Admin admin)
+        /// <summary>
+        /// Đăng nhập site quản trị
+        /// </summary>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <returns>Kết quả đăng nhập</returns>
+        [HttpPost("login")]
+        public async Task<ActionResult<bool>> LoginAdmin([FromBody] Admin admin)
         {
-            if(await _loginSvc.Login(admin))
+            var data = await _loginSvc.Login(admin);
+            if(data == false)
             {
-                return true;
-            } else
-            {
-                return false;
+                return NotFound();
             }
+            return data;
         }
 
-        // api/login/admins/email
-        [HttpGet("{email}")]
-        public async Task LogoutAdmin(string email)
+        /// <summary>
+        /// Đăng xuất site quản trị
+        /// </summary>
+        /// <param name="email">email</param>
+        /// <response Code="404">Không tìm thấy</response>
+        [HttpGet("logout/{email}")]
+        public async Task<ActionResult<bool>> LogoutAdmin(string email)
         {
-            await _loginSvc.Logout(email);
+            var data = await _loginSvc.Logout(email);
+            if(data == false)
+            {
+                return NotFound();
+            }
+            return data;
         }
     }
 }

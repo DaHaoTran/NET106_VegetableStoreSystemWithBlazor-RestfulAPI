@@ -1,6 +1,7 @@
 ﻿using API.Context;
 using API.Services.Interfaces;
-using UI.Models;
+using DTO;
+using Models;
 using API.Services.Implement;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,9 +9,9 @@ namespace API.Services.Implement
 {
     public class AdminLoginSvc : ILoginSvc<Admin>
     {
-        private readonly FoodShopDBContext _dbContext;
+        private readonly FastFoodDBContext _dbContext;
 
-        public AdminLoginSvc(FoodShopDBContext dbContext)
+        public AdminLoginSvc(FastFoodDBContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -35,14 +36,16 @@ namespace API.Services.Implement
             }
         }
 
-        public async Task Logout(string email)
+        public async Task<bool> Logout(string email)
         {
             var admin = await _dbContext.admins.Where(x => x.Email == email).FirstOrDefaultAsync();
             if(admin != default)
             {
                 admin.IsOnl = false;
                 await _dbContext.SaveChangesAsync();
+                return true;
             }
+            return false;
         }
     }
 }
