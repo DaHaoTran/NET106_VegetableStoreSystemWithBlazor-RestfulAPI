@@ -50,7 +50,7 @@ namespace API
             //AddDBContext
             builder.Services.AddDbContext<FastFoodDBContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("DTO"));
             });
 
             // Register Services

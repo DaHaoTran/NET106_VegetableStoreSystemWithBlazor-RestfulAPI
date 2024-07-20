@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DTO.Migrations
 {
     [DbContext(typeof(FastFoodDBContext))]
-    [Migration("20240716032758_NET106")]
-    partial class NET106
+    [Migration("20240720143526_NET106ASM")]
+    partial class NET106ASM
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,7 +70,12 @@ namespace DTO.Migrations
                     b.HasIndex("CustomerEmail")
                         .IsUnique();
 
-                    b.ToTable("carts");
+                    b.ToTable("carts", t =>
+                        {
+                            t.HasTrigger("AUTO_CREATE_CART");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("Models.CartItem", b =>
@@ -84,7 +89,7 @@ namespace DTO.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("Code")
+                    b.Property<Guid>("FoodCode")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
@@ -94,7 +99,7 @@ namespace DTO.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.HasIndex("Code");
+                    b.HasIndex("FoodCode");
 
                     b.ToTable("cartItems");
                 });
@@ -109,6 +114,7 @@ namespace DTO.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ComboName")
+                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
@@ -159,14 +165,21 @@ namespace DTO.Migrations
                         .HasColumnType("Varchar(200)");
 
                     b.Property<string>("PassWord")
+                        .IsRequired()
                         .HasColumnType("Varchar(100)");
 
                     b.Property<string>("UserName")
+                        .IsRequired()
                         .HasColumnType("Varchar(300)");
 
                     b.HasKey("Email");
 
-                    b.ToTable("customers");
+                    b.ToTable("customers", t =>
+                        {
+                            t.HasTrigger("AUTO_DELETE_RELATED");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("Models.CustomerInformation", b =>
@@ -218,6 +231,7 @@ namespace DTO.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("FoodName")
+                        .IsRequired()
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
 
@@ -240,7 +254,12 @@ namespace DTO.Migrations
 
                     b.HasIndex("FCategoryCode");
 
-                    b.ToTable("foods");
+                    b.ToTable("foods", t =>
+                        {
+                            t.HasTrigger("AUTO_SET_SOLD");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("Models.FoodCategory", b =>
@@ -250,6 +269,7 @@ namespace DTO.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CategoryName")
+                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -340,7 +360,7 @@ namespace DTO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ItemId"));
 
-                    b.Property<Guid>("Code")
+                    b.Property<Guid>("FoodCode")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("OrderCode")
@@ -354,11 +374,16 @@ namespace DTO.Migrations
 
                     b.HasKey("ItemId");
 
-                    b.HasIndex("Code");
+                    b.HasIndex("FoodCode");
 
                     b.HasIndex("OrderCode");
 
-                    b.ToTable("orderItems");
+                    b.ToTable("orderItems", t =>
+                        {
+                            t.HasTrigger("DECREASE_QUANTITY_FOOD");
+                        });
+
+                    b.HasAnnotation("SqlServer:UseSqlOutputClause", false);
                 });
 
             modelBuilder.Entity("Models.Cart", b =>
@@ -382,7 +407,7 @@ namespace DTO.Migrations
 
                     b.HasOne("Models.Food", "Food")
                         .WithMany("CartItems")
-                        .HasForeignKey("Code")
+                        .HasForeignKey("FoodCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -466,7 +491,7 @@ namespace DTO.Migrations
                 {
                     b.HasOne("Models.Food", "Food")
                         .WithMany("OrderItems")
-                        .HasForeignKey("Code")
+                        .HasForeignKey("FoodCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

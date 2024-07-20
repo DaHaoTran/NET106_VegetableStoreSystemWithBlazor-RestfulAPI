@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DTO.Migrations
 {
     /// <inheritdoc />
-    public partial class NET106 : Migration
+    public partial class NET106ASM : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -32,7 +32,7 @@ namespace DTO.Migrations
                 columns: table => new
                 {
                     ComboCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ComboName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    ComboName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     CurrentPrice = table.Column<int>(type: "int", nullable: false),
                     PreviousPrice = table.Column<int>(type: "int", nullable: false),
                     Image = table.Column<string>(type: "Varchar(Max)", nullable: false),
@@ -49,8 +49,8 @@ namespace DTO.Migrations
                 columns: table => new
                 {
                     Email = table.Column<string>(type: "Varchar(200)", nullable: false),
-                    PassWord = table.Column<string>(type: "Varchar(100)", nullable: true),
-                    UserName = table.Column<string>(type: "Varchar(300)", nullable: true)
+                    PassWord = table.Column<string>(type: "Varchar(100)", nullable: false),
+                    UserName = table.Column<string>(type: "Varchar(300)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -62,7 +62,7 @@ namespace DTO.Migrations
                 columns: table => new
                 {
                     FCategoryCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
+                    CategoryName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -92,7 +92,8 @@ namespace DTO.Migrations
                 name: "customerInformations",
                 columns: table => new
                 {
-                    CInforId = table.Column<int>(type: "int", nullable: false),
+                    CInforId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     PhoneNumber = table.Column<string>(type: "Char(10)", maxLength: 10, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -139,7 +140,7 @@ namespace DTO.Migrations
                 columns: table => new
                 {
                     FoodCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FoodName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    FoodName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: false),
                     CurrentPrice = table.Column<int>(type: "int", nullable: false),
                     PreviousPrice = table.Column<int>(type: "int", nullable: false),
                     Left = table.Column<int>(type: "int", nullable: false),
@@ -195,7 +196,7 @@ namespace DTO.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     CartId = table.Column<int>(type: "int", nullable: false),
-                    Code = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FoodCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -207,8 +208,8 @@ namespace DTO.Migrations
                         principalColumn: "CartId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_cartItems_foods_Code",
-                        column: x => x.Code,
+                        name: "FK_cartItems_foods_FoodCode",
+                        column: x => x.FoodCode,
                         principalTable: "foods",
                         principalColumn: "FoodCode",
                         onDelete: ReferentialAction.Cascade);
@@ -249,14 +250,14 @@ namespace DTO.Migrations
                     UnitPrice = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     OrderCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Code = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    FoodCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_orderItems", x => x.ItemId);
                     table.ForeignKey(
-                        name: "FK_orderItems_foods_Code",
-                        column: x => x.Code,
+                        name: "FK_orderItems_foods_FoodCode",
+                        column: x => x.FoodCode,
                         principalTable: "foods",
                         principalColumn: "FoodCode",
                         onDelete: ReferentialAction.Cascade);
@@ -274,9 +275,9 @@ namespace DTO.Migrations
                 column: "CartId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_cartItems_Code",
+                name: "IX_cartItems_FoodCode",
                 table: "cartItems",
-                column: "Code");
+                column: "FoodCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_carts_CustomerEmail",
@@ -316,9 +317,9 @@ namespace DTO.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_orderItems_Code",
+                name: "IX_orderItems_FoodCode",
                 table: "orderItems",
-                column: "Code");
+                column: "FoodCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_orderItems_OrderCode",
