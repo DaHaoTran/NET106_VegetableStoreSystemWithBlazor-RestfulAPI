@@ -32,7 +32,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Đăng xuất site quản trị
+        /// Đăng xuất site quản trị theo email
         /// </summary>
         /// <param name="email">email</param>
         /// <response Code="404">Không tìm thấy</response>

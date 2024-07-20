@@ -1,11 +1,11 @@
 ﻿using API.Services.Interfaces;
-using UI.Models;
+using Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    [Route("api/login/customers")]
+    [Route("api/customers")]
     [ApiController]
     public class LoginCustomerAPIController : ControllerBase
     {
@@ -15,11 +15,38 @@ namespace API.Controllers
             _loginSvc = loginSvc;
         }
 
-        // api/login/admins
-        [HttpPut]
-        public async Task<bool> LoginAdmin(Customer customer)
+        /// <summary>
+        /// Đăng nhập site khách hàng
+        /// </summary>
+        /// <response Code="404">Không tìm thấy</response>
+        /// <returns>Kết quả đăng nhập</returns>
+        [HttpPost("login")]
+        public async Task<ActionResult<bool>> LoginCustomer([FromBody] Customer customer)
         {
-            return await _loginSvc.Login(customer);
+            var data = await _loginSvc.Login(customer);
+            if (data == false)
+            {
+                return NotFound();
+            }
+            return data;
+        }
+
+        /// <summary>
+        /// Đăng xuất site khách hàng theo email
+        /// </summary>
+        /// <param name="email">email</param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException">Không có gì xảy ra !</exception>
+        /// <response Code="404">Không tìm thấy</response>
+        [HttpGet("logout/{email}")]
+        public async Task<ActionResult<bool>> LogoutCustomer(string email)
+        {
+            var data = await _loginSvc.Logout(email);
+            if (data == false)
+            {
+                return NotFound();
+            }
+            return data;
         }
     }
 }
