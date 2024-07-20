@@ -35,7 +35,7 @@ namespace API.Controllers
         /// <response Code="200">Tìm thấy</response>
         /// <returns>Danh sách đơn đặt</returns>
         [HttpGet]
-        public async Task<IEnumerable<Order>> Getorders(string state)
+        public async Task<IEnumerable<Order>> Getorders()
         {
             return await _readsvc.ReadDatas();
         }

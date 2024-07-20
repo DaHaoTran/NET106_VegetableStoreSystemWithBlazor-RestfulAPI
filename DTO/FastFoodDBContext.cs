@@ -24,13 +24,15 @@ namespace DTO
         public DbSet<OrderItem> orderItems { get; set; }
         public DbSet<Guest> guests { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            //if (!optionsBuilder.IsConfigured)
-            //{
-            //    optionsBuilder.UseSqlServer("Data Source=HAOTRAN;Initial Catalog=NET106_ASM_FastFood;Integrated Security=True;Trust Server Certificate=True", b => b.MigrationsAssembly("DTO"));
-            //}
-        }
+        public FastFoodDBContext(DbContextOptions<FastFoodDBContext> options) : base(options) { }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    if (!optionsBuilder.IsConfigured)
+        //    {
+        //        optionsBuilder.UseSqlServer("Data Source=HAOTRAN;Initial Catalog=NET106_ASM_FastFood;Integrated Security=True;Trust Server Certificate=True", b => b.MigrationsAssembly("DTO"));
+        //    }
+        //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

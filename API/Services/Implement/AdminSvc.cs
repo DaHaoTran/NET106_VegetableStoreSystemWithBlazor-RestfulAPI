@@ -1,5 +1,4 @@
-﻿using API.Context;
-using API.Services.Interfaces;
+﻿using API.Services.Interfaces;
 using DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
