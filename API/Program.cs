@@ -119,8 +119,8 @@ namespace API
             builder.Services.AddScoped<IAddable<List<OrderItem>>, OrderItemSvc>();
             builder.Services.AddScoped<ILookupMoreSvc<Guid, OrderItem> , OrderItemSvc>();
             //Login
-            builder.Services.AddTransient<ILoginSvc<Admin>, AdminLoginSvc>();
-            builder.Services.AddTransient<ILoginSvc<Customer>, CustomerLoginSvc>();
+            builder.Services.AddScoped<ILoginSvc<Admin>, AdminLoginSvc>();
+            builder.Services.AddScoped<ILoginSvc<Customer>, CustomerLoginSvc>();
             //Cart
             builder.Services.AddScoped<ILookupSvc<string, Cart>, CartSvc>();
             //Cart Item
