@@ -38,6 +38,7 @@ namespace XUnitTestAPI
             customer.Email = "haotgps30117@fpt.edu.vn";
             customer.PassWord = "Giahao1";
             _addsvc.Setup(x => x.AddNewData(customer));
+            _addsvc.Verify(x => x.AddNewData(customer), Times.Once);
         }
 
         [Fact(DisplayName = "CustomerSvc - Edit")]
@@ -47,12 +48,14 @@ namespace XUnitTestAPI
             customer.Email = "haotgps30117@fpt.edu.vn";
             customer.PassWord = "Giahao200";
             _editsvc.Setup(x => x.EditData(customer));
+            _editsvc.Verify(x => x.EditData(customer), Times.Once);
         }
 
         [Fact(DisplayName = "CustomerSvc - GetList")]
         public void GetCustomers()
         {
             _readsvc.Setup(x => x.ReadDatas());
+            _readsvc.Verify(x => x.ReadDatas(), Times.Once);
         }
 
         [Xunit.Theory(DisplayName = "CustomerSvc - GetList")]
@@ -60,6 +63,7 @@ namespace XUnitTestAPI
         public void GetCustomerByEmail(string email)
         {
             _lookupsvc.Setup(x => x.GetDataByKey(email));
+            _lookupsvc.Verify(x => x.GetDataByKey(email), Times.Once);
         }
 
         [Xunit.Theory(DisplayName = "CustomerSvc - GetList")]
@@ -68,6 +72,7 @@ namespace XUnitTestAPI
         {
             //string ex = $"Xóa {email} thành công !";
             _deletesvc.Setup(x => x.DeleteData(email));
+            _deletesvc.Verify(x => x.DeleteData(email), Times.Once);
         }
     }
 }
