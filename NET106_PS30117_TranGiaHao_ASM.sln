@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTO", "DTO\DTO.csproj", "{C9B72475-F7D9-4E54-9ABB-B7991F6C39EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnitTestAPI", "NUnitTestAPI\NUnitTestAPI.csproj", "{C9F077AF-4E72-4683-8316-4D0577BDDDE4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestAPI", "XUnitTestAPI\XUnitTestAPI.csproj", "{4611623E-24C1-43FB-AD15-F574BC614E39}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{C9B72475-F7D9-4E54-9ABB-B7991F6C39EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9B72475-F7D9-4E54-9ABB-B7991F6C39EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9B72475-F7D9-4E54-9ABB-B7991F6C39EA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C9F077AF-4E72-4683-8316-4D0577BDDDE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C9F077AF-4E72-4683-8316-4D0577BDDDE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C9F077AF-4E72-4683-8316-4D0577BDDDE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C9F077AF-4E72-4683-8316-4D0577BDDDE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4611623E-24C1-43FB-AD15-F574BC614E39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4611623E-24C1-43FB-AD15-F574BC614E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4611623E-24C1-43FB-AD15-F574BC614E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4611623E-24C1-43FB-AD15-F574BC614E39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

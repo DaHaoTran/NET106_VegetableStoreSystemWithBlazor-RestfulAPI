@@ -1,33 +1,25 @@
 ﻿using API.Services.Implement;
 using DTO;
 using Models;
-using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using API;
+using API.Services.Interfaces;
 
 namespace XUnitTestAPI
 {
     public class API_FoodSvc
     {
-        private Bunit.TestContext testContext;
-        private Mock<CustomerSvc> loginSvc;
-
-        [SetUp]
-        public void Setup()
+        private CustomerSvc _customerSvc;
+        public API_FoodSvc(CustomerSvc customerSvc)
         {
-            testContext = new Bunit.TestContext();
-            loginSvc = new Mock<CustomerSvc>();
+            _customerSvc = customerSvc;
         }
 
-        [TearDown]
-        public void Teardown()
-        {
-            testContext.Dispose();
-        }
+        [Fact(DisplayName = "CustomerSvc - Add")]
         public async void AddCustomer()
         {
             Customer customer = new Customer();
@@ -36,6 +28,7 @@ namespace XUnitTestAPI
             Assert.NotNull(await _customerSvc.AddNewData(customer));
         }
 
+        [Fact(DisplayName = "CustomerSvc - Edit")]
         public async void EditCustomer()
         {
             Customer customer = new Customer();
@@ -44,6 +37,7 @@ namespace XUnitTestAPI
             Assert.NotNull(await _customerSvc.EditData(customer));
         }
 
+        [Fact(DisplayName = "CustomerSvc - GetList")]
         public async void GetCustomers()
         {
             var customers = await _customerSvc.ReadDatas();
