@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Linq;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace API.Controllers
@@ -11,41 +12,40 @@ namespace API.Controllers
     public class ImageUploadsAPIController : ControllerBase
     {
         /// <summary>
-        /// Lưu ảnh vào hệ thống
+        /// Lưu ảnh vào hệ thống theo đường dẫn cung cấp
         /// </summary>
         /// <remarks>
         /// File hợp lệ: jpg file, png file, jpeg file
         /// </remarks>
-        /// <param name="file">file</param>
+        /// <param name = "file"> file </param>
+        /// <param name="filePath">đường dẫn copy ảnh</param>
         /// <response Code="400">Error</response>
-        /// <returns>Tên ảnh mã hóa</returns>
-        //[HttpPost("savetosystem")]
-        //public async Task<ActionResult<string>> SaveImageToSystem([FromForm] IFormFile file)
-        //{
-        //    if (file == null || file.Length == 0)
-        //    {
-        //        return BadRequest("không thấy tệp tin");
-        //    }
-        //    string filename = file.FileName;
-        //    string extension = Path.GetExtension(filename);
+        [HttpPost("savetosystem/{filePath}")]
+        public async Task<ActionResult<string>> SaveImageToSystem(IFormFile file, string filePath)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Upload a file");
+            }
+            string filename = file.FileName;
+            string extension = Path.GetExtension(filename);
 
-        //    string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
+            string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
 
-        //    if (!allowedExtensions.Contains(extension))
-        //    {
-        //        return BadRequest("tệp tin không hợp lệ");
-        //    }
+            if (!allowedExtensions.Contains(extension))
+            {
+                return BadRequest("File is not valid image");
+            }
 
-        //    string newFileName = $"{Guid.NewGuid()}{extension}";
-        //    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "FileUploads", newFileName);
+            string newFileName = $"{Guid.NewGuid()}{extension}";
 
-        //    using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
-        //    {
-        //        await file.CopyToAsync(fileStream);
-        //    }
+            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            {
+                await file.CopyToAsync(fileStream);
+            }
 
-        //    return newFileName;
-        //}
+            return Ok($"images/{newFileName}");
+        }
 
         /// <summary>
         /// Lấy hình ảnh bằng tên ảnh
@@ -81,26 +81,26 @@ namespace API.Controllers
         /// </remarks>
         /// <response Code="400">Error</response>
         /// <returns>Tên ảnh mã hóa</returns>
-        [HttpPost("name/encrypt")]
-        public ActionResult<string> SaveImageToSystem(IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-            {
-                return BadRequest("không thấy tệp tin");
-            }
-            string filename = file.FileName;
-            string extension = Path.GetExtension(filename);
+        //[HttpPost("name/encrypt")]
+        //public ActionResult<string> SaveImageToSystem(IFormFile file)
+        //{
+        //    if (file == null || file.Length == 0)
+        //    {
+        //        return BadRequest("không thấy tệp tin");
+        //    }
+        //    string filename = file.FileName;
+        //    string extension = Path.GetExtension(filename);
 
-            string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
+        //    string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
 
-            if (!allowedExtensions.Contains(extension))
-            {
-                return BadRequest("tệp tin không hợp lệ");
-            }
+        //    if (!allowedExtensions.Contains(extension))
+        //    {
+        //        return BadRequest("tệp tin không hợp lệ");
+        //    }
 
-            string newFileName = $"{Guid.NewGuid()}{extension}";
+        //    string newFileName = $"{Guid.NewGuid()}{extension}";
 
-            return newFileName;
-        }
+        //    return newFileName;
+        //}
     }
 }
