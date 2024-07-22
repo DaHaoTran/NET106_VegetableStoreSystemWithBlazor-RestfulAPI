@@ -19,13 +19,14 @@ namespace API.Controllers
         /// </remarks>
         /// <param name = "file"> file </param>
         /// <param name="filePath">đường dẫn copy ảnh</param>
+        /// <param name="encryptFileName">tên ảnh mã hóa</param>
         /// <response Code="400">Error</response>
-        [HttpPost("savetosystem/{filePath}")]
-        public async Task<ActionResult<string>> SaveImageToSystem(IFormFile file, string filePath)
+        [HttpPost("savetosystem/{encryptFileName}/{filePath}")]
+        public async Task<ActionResult<string>> SaveImageToSystem(IFormFile file, string encryptFileName, string filePath)
         {
             if (file == null || file.Length == 0)
             {
-                return BadRequest("Upload a file");
+                return BadRequest("Không thấy tệp tin");
             }
             string filename = file.FileName;
             string extension = Path.GetExtension(filename);
@@ -34,17 +35,17 @@ namespace API.Controllers
 
             if (!allowedExtensions.Contains(extension))
             {
-                return BadRequest("File is not valid image");
+                return BadRequest("Tệp tin không hợp lệ");
             }
 
-            string newFileName = $"{Guid.NewGuid()}{extension}";
+            string pathCombine = Path.Combine(filePath, encryptFileName);
 
-            using (var fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write))
+            using (var fileStream = new FileStream(pathCombine, FileMode.Create, FileAccess.Write))
             {
                 await file.CopyToAsync(fileStream);
             }
 
-            return Ok($"images/{newFileName}");
+            return Ok($"{pathCombine}");
         }
 
         /// <summary>
@@ -79,28 +80,28 @@ namespace API.Controllers
         /// <remarks>
         /// File hợp lệ: jpg file, png file, jpeg file
         /// </remarks>
-        /// <response Code="400">Error</response>
-        /// <returns>Tên ảnh mã hóa</returns>
-        //[HttpPost("name/encrypt")]
-        //public ActionResult<string> SaveImageToSystem(IFormFile file)
-        //{
-        //    if (file == null || file.Length == 0)
-        //    {
-        //        return BadRequest("không thấy tệp tin");
-        //    }
-        //    string filename = file.FileName;
-        //    string extension = Path.GetExtension(filename);
+        /// <response Code = "400" > Error </response>
+        /// <returns> Tên ảnh mã hóa</returns>
+        [HttpPost("name/encrypt")]
+        public ActionResult<string> SaveImageToSystem(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                return BadRequest("Không thấy tệp tin");
+            }
+            string filename = file.FileName;
+            string extension = Path.GetExtension(filename);
 
-        //    string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
+            string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
 
-        //    if (!allowedExtensions.Contains(extension))
-        //    {
-        //        return BadRequest("tệp tin không hợp lệ");
-        //    }
+            if (!allowedExtensions.Contains(extension))
+            {
+                return BadRequest("Tệp tin không hợp lệ");
+            }
 
-        //    string newFileName = $"{Guid.NewGuid()}{extension}";
+            string newFileName = $"{Guid.NewGuid()}{extension}";
 
-        //    return newFileName;
-        //}
+            return newFileName;
+        }
     }
 }
