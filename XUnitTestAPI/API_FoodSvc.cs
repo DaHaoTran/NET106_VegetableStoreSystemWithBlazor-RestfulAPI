@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 using Microsoft.AspNetCore.SignalR;
+using Castle.Core.Resource;
 
 namespace XUnitTestAPI
 {
@@ -30,20 +31,78 @@ namespace XUnitTestAPI
             if (_customerSvc == null) _customerSvc = new CustomerSvc(_dbContext);
         }
 
+        //Add
+        [Fact(DisplayName = "CustomerSvc - Add failed with exist email")]
+        public async void AddCustomerWithExistsEmail()
+        {
+            List<Customer> list = new List<Customer>()
+            {
+                new Customer { Email = "haotgps30117@fpt.edu.vn", PassWord = "Giahao1"},
+                new Customer { Email = "haotgps30117@fpt.edu.vn", PassWord = "Giahao2"}
+            };
+            int count = 0;
+            foreach(var customer in list)
+            {
+                count++;
+                if (count == 2)
+                {
+                    Assert.Null(await _customerSvc.AddNewData(customer));
+                }
+                await _customerSvc.AddNewData(customer);
+            }
+        }
+
+        [Fact(DisplayName = "CustomerSvc - Add failed with null password")]
+        public async void AddCustomerWithNullPassword()
+        {
+            Customer customer = new Customer();
+            customer.Email = "haotgps30117@fpt.edu.vn";
+            Assert.Null(await _customerSvc.AddNewData(customer));
+        }
+
         [Fact(DisplayName = "CustomerSvc - Add sucessfully")]
         public async void AddCustomerSucessfully()
         {
             Customer customer = new Customer();
             customer.Email = "haotgps30117@fpt.edu.vn";
             customer.PassWord = "Giahao1";
-            //_addsvc.Setup(x => x.AddNewData(customer)).ReturnsAsync(customer);
-            //_addsvc.Verify(x => x.AddNewData(customer), Times.Once);
             Assert.Equal(customer, await _customerSvc.AddNewData(customer));
+        }
+
+        //Edit
+        [Fact(DisplayName = "CustomerSvc - Edit failed with null email")]
+        public async void EditCustomerWithNullEmail()
+        {
+            CreateNewCustomer();
+            Customer customer = new Customer();
+            customer.PassWord = "Giahao200";
+            Assert.Null(await _customerSvc.EditData(customer));
+        }
+
+        [Fact(DisplayName = "CustomerSvc - Edit failed with null password")]
+        public async void EditCustomerWithNullPassword()
+        {
+            CreateNewCustomer();
+            Customer customer = new Customer();
+            customer.Email = "haotgps30117@fpt.edu.vn";
+            customer.PassWord = null;
+            Assert.Null(await _customerSvc.EditData(customer));
+        }
+
+        [Fact(DisplayName = "CustomerSvc - Edit failed with not found email")]
+        public async void EditCustomerWithNotFoundEmail()
+        {
+            CreateNewCustomer();
+            Customer customer = new Customer();
+            customer.Email = "haotgps20118@fpt.edu.vn";
+            customer.PassWord = "giahao200";
+            Assert.Null(await _customerSvc.EditData(customer));
         }
 
         [Fact(DisplayName = "CustomerSvc - Edit sucessfully")]
         public async void EditCustomerSucessfully()
         {
+            CreateNewCustomer();
             Customer customer = new Customer();
             customer.Email = "haotgps30117@fpt.edu.vn";
             customer.PassWord = "Giahao200";
@@ -52,32 +111,74 @@ namespace XUnitTestAPI
             Assert.Equal(customer, await _customerSvc.EditData(customer));
         }
 
+        //GetList
         [Fact(DisplayName = "CustomerSvc - Get list")]
         public async void GetCustomers()
         {
+            CreateNewCustomer();
             //_readsvc.Setup(x => x.ReadDatas()).ReturnsAsync(customers);
             //_readsvc.Verify(x => x.ReadDatas(), Times.Once);
             Assert.NotNull(await _customerSvc.ReadDatas());
         }
 
-        [Xunit.Theory(DisplayName = "CustomerSvc - Get list by email")]
+        //GetByEmail
+        [Xunit.Theory(DisplayName = "CustomerSvc - Get by email with null email")]
+        [InlineData(null)]
+        public async void GetCustomerByEmailWithNullEmail(string email)
+        {
+            CreateNewCustomer();
+            var customer = await _customerSvc.GetDataByKey(email);
+            Assert.Null(customer);
+        }
+
+        [Xunit.Theory(DisplayName = "CustomerSvc - Get by email")]
         [InlineData("haotgps30117@fpt.edu.vn")]
         public async void GetCustomerByEmail(string email)
         {
+            CreateNewCustomer();
             //_lookupsvc.Setup(x => x.GetDataByKey(email)).ReturnsAsync(customer);
             //_lookupsvc.Verify(x => x.GetDataByKey(email), Times.Once);
             var customer = await _customerSvc.GetDataByKey(email);
             Assert.Equal(email, customer.Email);
         }
 
+        //Delete
+        [Xunit.Theory(DisplayName = "CustomerSvc - Delete with not found email")]
+        [InlineData("haotgps20117@fpt.edu.vn")]
+        public async void DeleteCustomerWithNotFoundEmail(string email)
+        {
+            CreateNewCustomer();
+            string ex = "Không tìm thấy";
+            Assert.Equal(ex, await _customerSvc.DeleteData(email));
+        }
+
+        [Xunit.Theory(DisplayName = "CustomerSvc - Delete with null email")]
+        [InlineData(null)]
+        public async void DeleteCustomerWithNotNullEmail(string email)
+        {
+            CreateNewCustomer();
+            string ex = "Không tìm thấy";
+            Assert.Equal(ex, await _customerSvc.DeleteData(email));
+        }
+
         [Xunit.Theory(DisplayName = "CustomerSvc - Delete Sucessfully")]
         [InlineData("haotgps30117@fpt.edu.vn")]
-        public async void DeleteCustomers(string email)
+        public async void DeleteCustomer(string email)
         {
+            CreateNewCustomer();
             string ex = $"Xóa {email} thành công !";
             //_deletesvc.Setup(x => x.DeleteData(email)).ReturnsAsync(ex);
             //_deletesvc.Verify(x => x.DeleteData(email), Times.Once);
             Assert.Equal(ex, await _customerSvc.DeleteData(email));
+        }
+
+        //Others
+        private async void CreateNewCustomer()
+        {
+            Customer customer = new Customer();
+            customer.Email = "haotgps30117@fpt.edu.vn";
+            customer.PassWord = "Giahao1";
+            await _customerSvc.AddNewData(customer);
         }
     }
 }
