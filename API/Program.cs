@@ -41,6 +41,7 @@ namespace API
                     "- Tự động gán sold = 0 khi thêm mới thức ăn trong table foods database.\n" +
                     "- Tự động tạo id Cart khi thêm mới tài khoản Khách hàng trong table customers database. \n" +
                     "- Tự động xóa các thông tin liên quan của tài khoản khách hàng khi xóa khách hàng trong table customers database. \n" +
+                    "- Tự động xóa các thông tin liên quan của tài khoản khách viếng thăm khi xóa khách viếng thăm trong table guests database. \n" +
                     "- Các mã sẽ được tự động tạo mỗi khi thêm mới. \n"
                 });
                 // using System.Reflection;

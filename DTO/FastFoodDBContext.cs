@@ -42,10 +42,13 @@ namespace DTO
                 .ToTable(tb => tb.HasTrigger("AUTO_CREATE_CART"));
             modelBuilder
               .Entity<Customer>()
-              .ToTable(tb => tb.HasTrigger("AUTO_DELETE_RELATED"));
+              .ToTable(tb => tb.HasTrigger("AUTO_DELETE_RELATED_CUSTOMERS"));
             modelBuilder
               .Entity<OrderItem>()
               .ToTable(tb => tb.HasTrigger("DECREASE_QUANTITY_FOOD"));
+            modelBuilder
+              .Entity<Guest>()
+              .ToTable(tb => tb.HasTrigger("AUTO_DELETE_RELATED_GUESTS"));
         }
     }
 }
