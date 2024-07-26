@@ -16,13 +16,13 @@ using Castle.Core.Resource;
 
 namespace XUnitTestAPI
 {
-    public class API_FoodSvc
+    public class UTest_CustomerSvc
     {
         private CustomerSvc _customerSvc;
         private FastFoodDBContext _dbContext;
         private DbContextOptions<FastFoodDBContext> _options;
 
-        public API_FoodSvc()
+        public UTest_CustomerSvc()
         {
             _options = new DbContextOptionsBuilder<FastFoodDBContext>()
             .UseInMemoryDatabase(databaseName: "NET106_ASM_FastFood")
