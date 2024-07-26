@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.InMemory;
 using Models;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace XUnitTestAPI
 {
@@ -60,6 +61,7 @@ namespace XUnitTestAPI
         public async void EditCustomerInformationWithNotFoundId()
         {
             CreateNewCustomer();
+            CreateNewInformation();
             CustomerInformation information = new CustomerInformation();
             var cus = await _dbContext.customerInformations
                 .Where(x => x.CustomerEmail == "haotgps30117@fpt.edu.vn").FirstOrDefaultAsync();
@@ -76,6 +78,7 @@ namespace XUnitTestAPI
         public async void EditCustomerInformationSucessfully()
         {
             CreateNewCustomer();
+            CreateNewInformation();
             CustomerInformation information = new CustomerInformation();
             var cus = await _dbContext.customerInformations
                 .Where(x => x.CustomerEmail == "haotgps30117@fpt.edu.vn").FirstOrDefaultAsync();
@@ -93,7 +96,7 @@ namespace XUnitTestAPI
         public async void DeleteCustomerInformationWithNotFoundId()
         {
             CreateNewCustomer();
-            CustomerInformation information = new CustomerInformation();
+            CreateNewInformation();
             var cus = await _dbContext.customerInformations
                 .Where(x => x.CustomerEmail == "haotgps30117@fpt.edu.vn").FirstOrDefaultAsync();
             int id = cus!.CInforId + 1;
@@ -105,7 +108,7 @@ namespace XUnitTestAPI
         public async void DeleteCustomerInformationSucessfully()
         {
             CreateNewCustomer();
-            CustomerInformation information = new CustomerInformation();
+            CreateNewInformation();
             var cus = await _dbContext.customerInformations
                 .Where(x => x.CustomerEmail == "haotgps30117@fpt.edu.vn").FirstOrDefaultAsync();
             int id = cus!.CInforId;
@@ -113,13 +116,138 @@ namespace XUnitTestAPI
             Assert.Equal(ex, await _informationSvc.DeleteData(id));
         }
 
+        //GetList
+        [Fact(DisplayName = "CustomerInformationSvc - Get list")]
+        public async void GetCustomerInfomations()
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.NotNull(await _informationSvc.ReadDatas());
+        }
+
+        //GetById
+        [Fact(DisplayName = "CustomerInformationSvc - Get by id with null")]
+        public async void GetCustomerInformationByIdWithNull()
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.Null(await _informationSvc.GetDataByKey(null!));
+        }
+
+        [Fact(DisplayName = "CustomerInformationSvc - Get by id with not found id")]
+        public async void GetCustomerInfomationByIdWithNotFound()
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            var cus = await _dbContext.customerInformations
+               .Where(x => x.CustomerEmail == "haotgps30117@fpt.edu.vn").FirstOrDefaultAsync();
+            int id = cus!.CInforId + 1;
+            Assert.Null(await _informationSvc.GetDataByKey(id));
+        }
+
+        [Fact(DisplayName = "CustomerInfomationSvc - Get by id")]
+        public async void GetCustomerInformationById()
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            var cus = await _dbContext.customerInformations
+               .Where(x => x.CustomerEmail == "haotgps30117@fpt.edu.vn").FirstOrDefaultAsync();
+            int id = cus!.CInforId;
+            Assert.NotNull(await _informationSvc.GetDataByKey(id)); 
+        }
+
+        //GetListByRelated
+        [Fact(DisplayName = "CustomerInformationSvc - Get list by related information with null")]
+        public async void GetCustomerInformationsWithNull()
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.Null(await _informationSvc.GetListByKey(null!));
+        }
+
+        [Theory(DisplayName = "CustomerInformationSvc - Get list by related information with not found")]
+        [InlineData("haotgps30118@fpt.edu.vn")]
+        public async void GetCustomerInformationsWithNotFound(string email)
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.Null(await _informationSvc.GetListByKey(email));
+        }
+
+        [Theory(DisplayName = "CustomerInformationSvc - Get list by related information with email")]
+        [InlineData("haotgps30117@fpt.edu.vn")]
+        public async void GetCustomerInfomationsByEmail(string email)
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.NotNull(await _informationSvc.GetListByKey(email));
+        }
+
+        [Theory(DisplayName = "CustomerInformationSvc - Get list by related information with name")]
+        [InlineData("Hào")]
+        public async void GetCustomerInfomationsByName(string name)
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.NotNull(await _informationSvc.GetListByKey(name));
+        }
+
+        [Theory(DisplayName = "CustomerInformationSvc - Get list by related information with address")]
+        [InlineData("Quang Trung")]
+        public async void GetCustomerInfomationsByAddress(string address)
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.NotNull(await _informationSvc.GetListByKey(address));
+        }
+
+        //GetByPhoneNumber
+        [Theory(DisplayName = "CustomerInformationSvc - Get by phone number with null")]
+        [InlineData(null)]
+        public async void GetCustomerInformationByPhoneNumberWithNull(string phoneNumber)
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.Null(await _informationSvc.GetDataByKey(phoneNumber));
+        }
+
+        [Theory(DisplayName = "CustomerInformationSvc - Get by phone number with not found")]
+        [InlineData("0394734331")]
+        public async void GetCustomerInformationByPhoneNumberWithNotFound(string phoneNumber)
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.Null(await _informationSvc.GetDataByKey(phoneNumber));
+        }
+
+        [Theory(DisplayName = "CustomerInformationSvc - Get by phone number")]
+        [InlineData("0392837461")]
+        public async void GetCustomerInformationByPhoneNumber(string phoneNumber)
+        {
+            CreateNewCustomer();
+            CreateNewInformation();
+            Assert.NotNull(await _informationSvc.GetDataByKey(phoneNumber));
+        }
+
         //Others
+        [Fact(Skip = "Hàm")]
         private async void CreateNewCustomer()
         {
             Customer customer = new Customer();
             customer.Email = "haotgps30117@fpt.edu.vn";
             customer.PassWord = "Giahao1";
             await _customerSvc.AddNewData(customer);
+        }
+
+        [Fact(Skip = "Hàm")]
+        private async void CreateNewInformation()
+        {
+            CustomerInformation information = new CustomerInformation();
+            information.CustomerName = "Gia Hào";
+            information.Address = "Công viên phần mềm Quang Trung";
+            information.PhoneNumber = "0392837461";
+            information.CustomerEmail = "haotgps30117@fpt.edu.vn";
+            await _informationSvc.AddNewData(information);
         }
     }
 }

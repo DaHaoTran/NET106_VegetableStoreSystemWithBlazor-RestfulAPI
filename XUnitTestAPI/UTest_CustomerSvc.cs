@@ -131,6 +131,15 @@ namespace XUnitTestAPI
             Assert.Null(customer);
         }
 
+        [Xunit.Theory(DisplayName = "CustomerSvc - Get by email with not found email")]
+        [InlineData("haotgps30118@fpt.edu.vn")]
+        public async void GetCustomerByEmailWithNotFoundEmail(string email)
+        {
+            CreateNewCustomer();
+            var customer = await _customerSvc.GetDataByKey(email);
+            Assert.Null(customer);
+        }
+
         [Xunit.Theory(DisplayName = "CustomerSvc - Get by email")]
         [InlineData("haotgps30117@fpt.edu.vn")]
         public async void GetCustomerByEmail(string email)
@@ -173,6 +182,7 @@ namespace XUnitTestAPI
         }
 
         //Others
+        [Fact(Skip = "Hàm")]
         private async void CreateNewCustomer()
         {
             Customer customer = new Customer();
