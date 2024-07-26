@@ -37,12 +37,12 @@ namespace Models
         public string Image { get; set; }
 
         //[Required(ErrorMessage = "Phải nhập ngày áp dụng giá mới")]
-        [DisplayName("Giá mới")]
+        [DisplayName("Bắt đầu áp dụng giá mới")]
         [AllowNull]
         public DateTime ApplyDate { get; set; }
 
-        [Required(ErrorMessage = "Phải nhập ngày áp dụng giá cũ")]
-        [DisplayName("Giá cũ")]
+        [Required(ErrorMessage = "Phải nhập hạn áp dụng giá mới")]
+        [DisplayName("Hạn áp dụng giá mới")]
         public DateTime ExpDate { get; set; }
 
         public ICollection<ComboDetail>? Details { get; set; }
