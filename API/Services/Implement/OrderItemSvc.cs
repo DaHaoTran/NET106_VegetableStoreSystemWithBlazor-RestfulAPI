@@ -22,6 +22,10 @@ namespace API.Services.Implement
         public async Task<IEnumerable<OrderItem>> GetListByKey(Guid key)
         {
             var find = await _dbContext.orderItems.Where(x => x.OrderCode == key).ToListAsync();
+            if(find.Count == 0)
+            {
+                return null;
+            }
             return find;
         }
     }

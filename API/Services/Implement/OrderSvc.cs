@@ -54,6 +54,10 @@ namespace API.Services.Implement
         public async Task<IEnumerable<Order>> GetListByKey(string key)
         {
             var find = await _dbContext.orders.Where(x => x.CustomerEmail == key).ToListAsync();
+            if(find.Count == 0)
+            {
+                return null;
+            }
             return find;
         }
        

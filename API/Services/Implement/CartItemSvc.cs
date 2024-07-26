@@ -59,6 +59,10 @@ namespace API.Services.Implement
         public async Task<IEnumerable<CartItem>> GetListByKey(int key)
         {
             var find = await _dbContext.cartItems.Where(x => x.CartId == key).ToListAsync();
+            if(find.Count == 0)
+            {
+                return null;
+            }
             return find;
         }
     }

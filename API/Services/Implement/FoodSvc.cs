@@ -79,8 +79,12 @@ namespace API.Services.Implement
 
         public async Task<IEnumerable<Food>> GetListByKey(string key)
         {
-            var data = await _dbContext.foods.Where(x => x.FoodName.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
-            return data;
+            var find = await _dbContext.foods.Where(x => x.FoodName.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+            if(find.Count == 0)
+            {
+                return null;
+            }
+            return find;
         }
 
         public async Task<IEnumerable<Food>> ReadDatas()

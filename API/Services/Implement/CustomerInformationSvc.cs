@@ -81,12 +81,16 @@ namespace API.Services.Implement
         public async Task<IEnumerable<CustomerInformation>> GetListByKey(string key)
         {
             var find = await _dbContext.customerInformations.Where(x => x.CustomerEmail == key).ToListAsync();
-            if(find == null)
+            if(find.Count == 0)
             {
                 find = await _dbContext.customerInformations.Where(x => x.CustomerName.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
-                if(find == null)
+                if(find.Count == 0)
                 {
                     find = await _dbContext.customerInformations.Where(x => x.Address.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+                    if(find.Count == 0)
+                    {
+                        return null;
+                    }
                 }
             }
             return find;

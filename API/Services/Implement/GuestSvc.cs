@@ -73,9 +73,13 @@ namespace API.Services.Implement
         public async Task<IEnumerable<Guest>> GetListByKey(string key)
         {
             var find = await _dbContext.guests.Where(x => x.GuestName.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
-            if(find == null)
+            if(find.Count == 0)
             {
                 find = await _dbContext.guests.Where(x => x.Address.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+                if(find.Count == 0)
+                {
+                    return null;
+                }
             }
             return find;
         }

@@ -79,6 +79,10 @@ namespace API.Services.Implement
         public async Task<IEnumerable<Combo>> GetListByKey(string key)
         {
             var find = await _dbContext.combos.Where(x => x.ComboName.Contains(key, StringComparison.OrdinalIgnoreCase)).ToListAsync();
+            if(find.Count == 0)
+            {
+                return null;
+            }
             return find;
         }
 
