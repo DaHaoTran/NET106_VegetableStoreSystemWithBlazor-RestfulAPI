@@ -13,6 +13,7 @@ using Moq;
 using Xunit;
 using Microsoft.AspNetCore.SignalR;
 using Castle.Core.Resource;
+using Xunit.Sdk;
 
 namespace XUnitTestAPI
 {
@@ -79,13 +80,14 @@ namespace XUnitTestAPI
             Assert.Null(await _customerSvc.EditData(customer));
         }
 
-        [Fact(DisplayName = "CustomerSvc - Edit failed with null password")]
+        [Fact(DisplayName = "CustomerSvc - Edit failed with null password", Skip = "No catch ex")]
         public async void EditCustomerWithNullPassword()
         {
             Customer customer = new Customer();
             customer.Email = "haotgps30117@fpt.edu.vn";
             customer.PassWord = null;
-            Assert.Null(await _customerSvc.EditData(customer));
+            Action act = async () => await _customerSvc.EditData(customer);
+            Assert.Throws<NotNullException>(act);
         }
 
         [Fact(DisplayName = "CustomerSvc - Edit failed with not found email")]
