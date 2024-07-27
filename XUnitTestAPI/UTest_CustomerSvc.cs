@@ -29,6 +29,7 @@ namespace XUnitTestAPI
             .Options;
             _dbContext = new FastFoodDBContext(_options);
             if (_customerSvc == null) _customerSvc = new CustomerSvc(_dbContext);
+            CreateNewCustomer();
         }
 
         //Add
@@ -64,7 +65,7 @@ namespace XUnitTestAPI
         public async void AddCustomerSucessfully()
         {
             Customer customer = new Customer();
-            customer.Email = "haotgps30117@fpt.edu.vn";
+            customer.Email = "bachdb30284@fpt.edu.vn";
             customer.PassWord = "Giahao1";
             Assert.Equal(customer, await _customerSvc.AddNewData(customer));
         }
@@ -73,7 +74,6 @@ namespace XUnitTestAPI
         [Fact(DisplayName = "CustomerSvc - Edit failed with null email")]
         public async void EditCustomerWithNullEmail()
         {
-            CreateNewCustomer();
             Customer customer = new Customer();
             customer.PassWord = "Giahao200";
             Assert.Null(await _customerSvc.EditData(customer));
@@ -82,7 +82,6 @@ namespace XUnitTestAPI
         [Fact(DisplayName = "CustomerSvc - Edit failed with null password")]
         public async void EditCustomerWithNullPassword()
         {
-            CreateNewCustomer();
             Customer customer = new Customer();
             customer.Email = "haotgps30117@fpt.edu.vn";
             customer.PassWord = null;
@@ -92,7 +91,6 @@ namespace XUnitTestAPI
         [Fact(DisplayName = "CustomerSvc - Edit failed with not found email")]
         public async void EditCustomerWithNotFoundEmail()
         {
-            CreateNewCustomer();
             Customer customer = new Customer();
             customer.Email = "haotgps20118@fpt.edu.vn";
             customer.PassWord = "giahao200";
@@ -102,7 +100,6 @@ namespace XUnitTestAPI
         [Fact(DisplayName = "CustomerSvc - Edit sucessfully")]
         public async void EditCustomerSucessfully()
         {
-            CreateNewCustomer();
             Customer customer = new Customer();
             customer.Email = "haotgps30117@fpt.edu.vn";
             customer.PassWord = "Giahao200";
@@ -115,7 +112,6 @@ namespace XUnitTestAPI
         [Fact(DisplayName = "CustomerSvc - Get list")]
         public async void GetCustomers()
         {
-            CreateNewCustomer();
             //_readsvc.Setup(x => x.ReadDatas()).ReturnsAsync(customers);
             //_readsvc.Verify(x => x.ReadDatas(), Times.Once);
             Assert.NotNull(await _customerSvc.ReadDatas());
@@ -126,7 +122,6 @@ namespace XUnitTestAPI
         [InlineData(null)]
         public async void GetCustomerByEmailWithNullEmail(string email)
         {
-            CreateNewCustomer();
             var customer = await _customerSvc.GetDataByKey(email);
             Assert.Null(customer);
         }
@@ -135,7 +130,6 @@ namespace XUnitTestAPI
         [InlineData("haotgps30118@fpt.edu.vn")]
         public async void GetCustomerByEmailWithNotFoundEmail(string email)
         {
-            CreateNewCustomer();
             var customer = await _customerSvc.GetDataByKey(email);
             Assert.Null(customer);
         }
@@ -144,7 +138,6 @@ namespace XUnitTestAPI
         [InlineData("haotgps30117@fpt.edu.vn")]
         public async void GetCustomerByEmail(string email)
         {
-            CreateNewCustomer();
             //_lookupsvc.Setup(x => x.GetDataByKey(email)).ReturnsAsync(customer);
             //_lookupsvc.Verify(x => x.GetDataByKey(email), Times.Once);
             var customer = await _customerSvc.GetDataByKey(email);
@@ -156,7 +149,6 @@ namespace XUnitTestAPI
         [InlineData("haotgps20117@fpt.edu.vn")]
         public async void DeleteCustomerWithNotFoundEmail(string email)
         {
-            CreateNewCustomer();
             string ex = "Không tìm thấy";
             Assert.Equal(ex, await _customerSvc.DeleteData(email));
         }
@@ -165,7 +157,6 @@ namespace XUnitTestAPI
         [InlineData(null)]
         public async void DeleteCustomerWithNotNullEmail(string email)
         {
-            CreateNewCustomer();
             string ex = "Không tìm thấy";
             Assert.Equal(ex, await _customerSvc.DeleteData(email));
         }
@@ -174,7 +165,6 @@ namespace XUnitTestAPI
         [InlineData("haotgps30117@fpt.edu.vn")]
         public async void DeleteCustomer(string email)
         {
-            CreateNewCustomer();
             string ex = $"Xóa {email} thành công !";
             //_deletesvc.Setup(x => x.DeleteData(email)).ReturnsAsync(ex);
             //_deletesvc.Verify(x => x.DeleteData(email), Times.Once);
@@ -182,7 +172,7 @@ namespace XUnitTestAPI
         }
 
         //Others
-        [Fact(Skip = "Hàm")]
+        [Fact(Skip = "Function")]
         private async void CreateNewCustomer()
         {
             Customer customer = new Customer();
