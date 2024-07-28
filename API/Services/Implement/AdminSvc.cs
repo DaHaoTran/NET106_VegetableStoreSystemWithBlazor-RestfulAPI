@@ -69,6 +69,7 @@ namespace API.Services.Implement
             Task task = Task.Run(() =>
             {
                 find.Email = entity.Email;
+                find.Level = entity.Level;
                 find.Password = AuthencationDataSvc.EncryptionPassword(entity.Password);
             });
             task.Wait();
