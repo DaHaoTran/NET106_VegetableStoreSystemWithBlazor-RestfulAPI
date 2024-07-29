@@ -20,6 +20,7 @@ namespace API.Services.Implement
             {
                 entity.OrderCode = new Guid();
                 entity.OrderDate = DateTime.Now;
+                entity.State = "Not delivered";
             });
             t.Wait();
             await _dbContext.orders.AddAsync(entity);

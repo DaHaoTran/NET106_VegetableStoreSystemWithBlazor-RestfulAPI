@@ -62,8 +62,9 @@ namespace API.Controllers
         /// </summary>
         /// <remarks>
         /// Lưu ý:
-        /// Hãy có một customerInformation trong customerInformations (table database) trước khi thực hiện thêm mới này
-        /// Hãy có một customer trong customers (table database) trước khi thực hiện thêm mới này
+        /// Hãy có một customerInformation trong customerInformations (table database) trước khi thực hiện thêm mới này.
+        /// Hãy có một customer trong customers (table database) trước khi thực hiện thêm mới này.
+        /// State có 3 loại: Not delivered (chưa giao), Ongoing delivered (đang giao), Delivered (đã giao)
         /// </remarks>
         /// <example>
         /// {
@@ -87,6 +88,9 @@ namespace API.Controllers
         /// <summary>
         /// Chỉnh sửa trạng thái đơn hàng theo mã đơn hàng
         /// </summary>
+        /// <remarks>
+        /// State có 3 loại: Not delivered (chưa giao), Ongoing delivered (đang giao), Delivered (đã giao)
+        /// </remarks>
         /// <param name="code">orderCode</param>
         /// <response Code="404">Không tìm thấy</response>
         /// <response Code="202">Thành công</response>

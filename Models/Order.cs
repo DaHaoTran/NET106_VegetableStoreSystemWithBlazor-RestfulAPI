@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Models
 {
@@ -15,6 +16,7 @@ namespace Models
 
         [MaxLength(100)]
         [DisplayName("Trạng thái")]
+        [AllowNull]
         public string State { get; set; }
 
         [DisplayName("Ngày giao")]
