@@ -50,7 +50,7 @@ namespace API.Services.Implement
             find.State = entity.State;
             if(entity.State == "Delivered")
             {
-                entity.DeliveryDate = DateTime.Now;
+                find.DeliveryDate = DateTime.Now;
             }
             await _dbContext.SaveChangesAsync();
             return find;
