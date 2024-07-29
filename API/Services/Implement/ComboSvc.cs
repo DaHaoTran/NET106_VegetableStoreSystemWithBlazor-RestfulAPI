@@ -16,7 +16,7 @@ namespace API.Services.Implement
 
         public async Task<Combo> AddNewData(Combo entity)
         {
-            var find = await _dbContext.combos.Where(x => x.ComboName.Contains(entity.ComboName, StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+            var find = await _dbContext.combos.Where(x => x.ComboName == entity.ComboName).FirstOrDefaultAsync();
             if(find != default)
             {
                 return null;
@@ -50,6 +50,11 @@ namespace API.Services.Implement
         {
             var find = await _dbContext.combos.Where(x => x.ComboCode == entity.ComboCode).FirstOrDefaultAsync();
             if(find == default)
+            {
+                return null;
+            }
+            var find2 = await _dbContext.combos.Where(x => x.ComboName == entity.ComboName && x.ComboCode != find.ComboCode).FirstOrDefaultAsync();
+            if(find2 != default)
             {
                 return null;
             }

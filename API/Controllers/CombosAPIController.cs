@@ -107,7 +107,7 @@ namespace API.Controllers
         /// Sửa một combo được chọn theo comboCode
         /// </summary>
         /// <param name="code">comboCode</param>
-        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy hhoặc comName đã được sử dụng</response>
         /// <response Code="202">Thành công</response>
         /// <returns>Combo đã chỉnh sửa</returns>
         [HttpPut("{code}")]

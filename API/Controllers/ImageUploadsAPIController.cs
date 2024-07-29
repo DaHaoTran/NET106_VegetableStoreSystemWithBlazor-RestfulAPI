@@ -83,7 +83,7 @@ namespace API.Controllers
         /// <response Code = "400" > Error </response>
         /// <returns> Tên ảnh mã hóa</returns>
         [HttpPost("name/encrypt")]
-        public ActionResult<string> SaveImageToSystem(IFormFile file)
+        public ActionResult<string> EncryptFileName(IFormFile file)
         {
             if (file == null || file.Length == 0)
             {

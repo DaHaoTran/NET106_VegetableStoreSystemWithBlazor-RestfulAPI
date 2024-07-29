@@ -81,7 +81,7 @@ namespace API.ApiController
         /// <summary>
         /// Chỉnh sửa một loại thức ăn được chọn theo fCategoryCode
         /// </summary>
-        /// <response Code="404">Không tìm thấy</response>
+        /// <response Code="404">Không tìm thấy hoặc categoryName đã được sử dụng</response>
         /// <response Code="202">Thành công</response>
         /// <param name="code">fCategoryCode</param>
         /// <returns>Thức ăn được chỉnh sửa</returns>

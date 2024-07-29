@@ -16,7 +16,7 @@ namespace API.Services.Implement
 
         public async Task<Food> AddNewData(Food entity)
         {
-            var data = await _dbContext.foods.Where(x => x.FoodName.Contains(entity.FoodName, StringComparison.OrdinalIgnoreCase)).FirstOrDefaultAsync();
+            var data = await _dbContext.foods.Where(x => x.FoodName == entity.FoodName).FirstOrDefaultAsync();
             if(data != default)
             {
                 return null;
@@ -48,6 +48,11 @@ namespace API.Services.Implement
         {
             var find = await _dbContext.foods.Where(x => x.FoodCode == entity.FoodCode).FirstOrDefaultAsync();
             if(find == default)
+            {
+                return null;
+            }
+            var find2 = await _dbContext.foods.Where(x => x.FoodName == entity.FoodName && x.AdminCode != find.AdminCode).FirstOrDefaultAsync();
+            if(find2 != default)
             {
                 return null;
             }
