@@ -48,6 +48,10 @@ namespace API.Services.Implement
                 return null;
             }
             find.State = entity.State;
+            if(entity.State == "Delivered")
+            {
+                entity.DeliveryDate = DateTime.Now;
+            }
             await _dbContext.SaveChangesAsync();
             return find;
         }
