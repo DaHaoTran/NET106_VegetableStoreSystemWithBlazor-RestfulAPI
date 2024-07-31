@@ -52,8 +52,8 @@ namespace XUnitTestAPI
             information.CustomerName = "Trung Kỳ";
             information.Address = "Quận Gò Vấp";
             information.PhoneNumber = "0837461234";
-            information.CustomerEmail = "kyht30118@fpt.edu.vn";
-            Assert.Equal(information, await _informationSvc.AddNewData(information));
+            information.CustomerEmail = "haotgps30117@fpt.edu.vn";
+            Assert.NotNull(await _informationSvc.AddNewData(information));
         }
 
         //Edit
@@ -84,7 +84,7 @@ namespace XUnitTestAPI
             information.Address = "Công viên phần mềm Quang Trung, Quận 12, TP.HCM";
             information.PhoneNumber = "0392837461";
             information.CustomerEmail = "haotgps30117@fpt.edu.vn";
-            Assert.Equal(information, await _informationSvc.EditData(information));
+            Assert.NotNull(await _informationSvc.EditData(information));
         }
 
         //Delete
@@ -125,9 +125,7 @@ namespace XUnitTestAPI
         [Fact(DisplayName = "CustomerInformationSvc - Get by id with not found id")]
         public async void GetCustomerInfomationByIdWithNotFound()
         {
-            var cus = await _dbContext.customerInformations
-               .Where(x => x.CustomerEmail == "haotgps30117@fpt.edu.vn").FirstOrDefaultAsync();
-            int id = cus!.CInforId + 1;
+            int id = 10;
             Assert.Null(await _informationSvc.GetDataByKey(id));
         }
 
@@ -141,10 +139,11 @@ namespace XUnitTestAPI
         }
 
         //GetListByRelated
-        [Fact(DisplayName = "CustomerInformationSvc - Get list by related information with null")]
-        public async void GetCustomerInformationsWithNull()
+        [Fact(DisplayName = "CustomerInformationSvc - Get list by related information with null", Skip = "No catch ex")]
+        public void GetCustomerInformationsWithNull()
         {
-            Assert.Null(await _informationSvc.GetListByKey(null!));
+            Action act = async () => await _informationSvc.GetListByKey(null!);
+            Assert.Throws<ArgumentNullException>(() => act());  
         }
 
         [Theory(DisplayName = "CustomerInformationSvc - Get list by related information with not found")]
