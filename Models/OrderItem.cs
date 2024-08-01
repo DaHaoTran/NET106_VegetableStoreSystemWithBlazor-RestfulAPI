@@ -7,7 +7,6 @@ namespace Models
     public class OrderItem
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ItemId { get; set; }
 
         public int UnitPrice { get; set; }

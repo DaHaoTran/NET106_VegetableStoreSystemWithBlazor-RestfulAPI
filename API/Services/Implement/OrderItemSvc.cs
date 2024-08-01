@@ -12,8 +12,24 @@ namespace API.Services.Implement
             _dbContext = dbContext;
         }
 
+        private int NewId()
+        {
+            int id = _dbContext.orderItems.Count() + 1;
+            int count = 0;
+            while (_dbContext.guests.Any(x => x.GuesId == id))
+            {
+                count++;
+                id += count;
+            }
+            return id;
+        }
+
         public async Task<List<OrderItem>> AddNewData(List<OrderItem> entity)
         {
+            for(int i = 0; i < entity.Count; i++)
+            {
+                entity[i].ItemId = NewId();
+            }
             await _dbContext.orderItems.AddRangeAsync(entity);
             await _dbContext.SaveChangesAsync();
             return entity;

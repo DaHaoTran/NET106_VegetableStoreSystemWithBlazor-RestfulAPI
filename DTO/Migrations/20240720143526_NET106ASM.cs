@@ -73,8 +73,7 @@ namespace DTO.Migrations
                 name: "carts",
                 columns: table => new
                 {
-                    CartId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartId = table.Column<int>(type: "int", nullable: false),
                     CustomerEmail = table.Column<string>(type: "Varchar(200)", nullable: false)
                 },
                 constraints: table =>
@@ -92,8 +91,7 @@ namespace DTO.Migrations
                 name: "customerInformations",
                 columns: table => new
                 {
-                    CInforId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CInforId = table.Column<int>(type: "int", nullable: false),
                     CustomerName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     PhoneNumber = table.Column<string>(type: "Char(10)", maxLength: 10, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -170,8 +168,8 @@ namespace DTO.Migrations
                 name: "guests",
                 columns: table => new
                 {
-                    GuesId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    GuesId = table.Column<int>(type: "int", nullable: false),
+                        //.Annotation("SqlServer:Identity", "1, 1"),
                     GuestName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     PhoneNumber = table.Column<string>(type: "Char(10)", maxLength: 10, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -192,8 +190,8 @@ namespace DTO.Migrations
                 name: "cartItems",
                 columns: table => new
                 {
-                    ItemId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                        //.Annotation("SqlServer:Identity", "1, 1"),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     CartId = table.Column<int>(type: "int", nullable: false),
                     FoodCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -219,8 +217,7 @@ namespace DTO.Migrations
                 name: "comboDetails",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     FoodCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ComboCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -245,8 +242,7 @@ namespace DTO.Migrations
                 name: "orderItems",
                 columns: table => new
                 {
-                    ItemId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
                     OrderCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
