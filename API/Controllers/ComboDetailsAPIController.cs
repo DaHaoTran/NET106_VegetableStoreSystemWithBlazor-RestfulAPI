@@ -14,18 +14,21 @@ namespace API.Controllers
         private readonly IEditable<ComboDetail> _editsvc;
         private readonly IDeletable<int, ComboDetail> _deletesvc;
         private readonly ILookupMoreSvc<Guid, ComboDetail> _lookupsvc;
+        private readonly ILookupSvc<int, ComboDetail> _lookupsvc2;
 
         public ComboDetailsAPIController(IReadable<ComboDetail> readsvc,
             IAddable<ComboDetail> addsvc,
             IEditable<ComboDetail> editsvc,
             IDeletable<int, ComboDetail> deletesvc,
-            ILookupMoreSvc<Guid, ComboDetail> lookupsvc)
+            ILookupMoreSvc<Guid, ComboDetail> lookupsvc,
+            ILookupSvc<int, ComboDetail> lookupsvc2)
         {
             _readsvc = readsvc;
             _addsvc = addsvc;
             _editsvc = editsvc;
             _lookupsvc = lookupsvc;
             _deletesvc = deletesvc;
+            _lookupsvc2 = lookupsvc2;
         }
 
         /// <summary>
@@ -54,6 +57,22 @@ namespace API.Controllers
                 return NotFound();
             }
             return data.ToList();
+        }
+
+        /// <summary>
+        /// Lấy một chi tiết combo theo id
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <returns>Chi tiết combo</returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ComboDetail>> GetDetailById(int id)
+        {
+            var data = await _lookupsvc2.GetDataByKey(id);
+            if (data == null)
+            {
+                return NotFound();
+            }
+            return data;
         }
 
         /// <summary>
