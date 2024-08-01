@@ -111,7 +111,7 @@ namespace API.Controllers
         /// <param name="id">Id</param>
         /// <response Code="404">Không tìm thấy</response>
         /// <returns></returns>
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDetails(int id)
         {
             var data = await _deletesvc.DeleteData(id);
