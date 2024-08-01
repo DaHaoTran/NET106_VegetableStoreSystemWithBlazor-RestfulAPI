@@ -5,7 +5,7 @@ using Models;
 
 namespace API.Services.Implement
 {
-    public class ComboDetailSvc : IAddable<ComboDetail>, IEditable<ComboDetail>, IDeletable<int, ComboDetail>, ILookupMoreSvc<Guid, ComboDetail>, IReadable<ComboDetail>
+    public class ComboDetailSvc : IAddable<ComboDetail>, IEditable<ComboDetail>, IDeletable<int, ComboDetail>, ILookupMoreSvc<Guid, ComboDetail>, IReadable<ComboDetail>, ILookupSvc<int,  ComboDetail>
     {
         private readonly FastFoodDBContext _dbContext;
         public ComboDetailSvc(FastFoodDBContext dbContext) 
@@ -84,6 +84,16 @@ namespace API.Services.Implement
         public async Task<IEnumerable<ComboDetail>> ReadDatas()
         {
             return await _dbContext.comboDetails.ToListAsync();
+        }
+
+        public async Task<ComboDetail> GetDataByKey(int key)
+        {
+            var find = await _dbContext.comboDetails.Where(x => x.Id == key).FirstOrDefaultAsync();
+            if(find == default)
+            {
+                return null;
+            }
+            return find;
         }
     }
 }

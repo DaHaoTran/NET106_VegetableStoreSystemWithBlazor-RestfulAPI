@@ -90,6 +90,7 @@ namespace API
             builder.Services.AddScoped<IEditable<ComboDetail>, ComboDetailSvc>();
             builder.Services.AddScoped<IDeletable<int, ComboDetail>, ComboDetailSvc>();
             builder.Services.AddScoped<ILookupMoreSvc<Guid, ComboDetail>, ComboDetailSvc>();
+            builder.Services.AddScoped<ILookupSvc<int, ComboDetail>, ComboDetailSvc>();
             //Customer
             builder.Services.AddScoped<IAddable<Customer>, CustomerSvc>();
             builder.Services.AddTransient<IReadable<Customer>, CustomerSvc>();
