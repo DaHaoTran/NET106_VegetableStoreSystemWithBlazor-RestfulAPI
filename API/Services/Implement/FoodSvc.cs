@@ -51,7 +51,7 @@ namespace API.Services.Implement
             {
                 return null;
             }
-            var find2 = await _dbContext.foods.Where(x => x.FoodName == entity.FoodName && x.AdminCode != find.AdminCode).FirstOrDefaultAsync();
+            var find2 = await _dbContext.foods.Where(x => x.FoodName == entity.FoodName && x.FoodCode != find.FoodCode).FirstOrDefaultAsync();
             if(find2 != default)
             {
                 return null;
