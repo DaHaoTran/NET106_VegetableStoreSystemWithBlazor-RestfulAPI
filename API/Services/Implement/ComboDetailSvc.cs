@@ -73,7 +73,7 @@ namespace API.Services.Implement
 
         public async Task<IEnumerable<ComboDetail>> GetListByKey(Guid key)
         {
-            var find = await _dbContext.comboDetails.Where(x => x.FoodCode == key).ToListAsync();
+            var find = await _dbContext.comboDetails.Where(x => x.ComboCode == key).ToListAsync();
             if (find.Count == 0)
             {
                 return null;
