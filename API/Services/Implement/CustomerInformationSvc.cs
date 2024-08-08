@@ -28,13 +28,13 @@ namespace API.Services.Implement
         public async Task<CustomerInformation> AddNewData(CustomerInformation entity)
         {
             entity.CInforId = NewId();
-            if(_dbContext.customers.Any(x => x.Email != entity.CustomerEmail))
+            if(_dbContext.customers.Any(x => x.Email == entity.CustomerEmail))
             {
-                return null;
+                await _dbContext.customerInformations.AddAsync(entity);
+                await _dbContext.SaveChangesAsync();
+                return entity;
             }
-            await _dbContext.customerInformations.AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
-            return entity;
+            return null;
         }
 
         public async Task<string> DeleteData(int key)
