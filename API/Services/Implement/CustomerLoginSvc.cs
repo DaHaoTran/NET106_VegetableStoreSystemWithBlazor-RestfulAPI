@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Services.Implement
 {
-    public class CustomerLoginSvc : ILoginSvc<Customer>
+    public class CustomerLoginSvc : ILoginSvc<Login>
     {
         private readonly FastFoodDBContext _dbContext;
 
@@ -15,12 +15,12 @@ namespace API.Services.Implement
             _dbContext = dbContext;
         }
 
-        public async Task<bool> Login(Customer entity)
+        public async Task<bool> Login(Login entity)
         {
             var customer = await _dbContext.customers.Where(x => x.Email == entity.Email).FirstOrDefaultAsync();
             if (customer != default)
             {
-                if (customer.PassWord == AuthencationDataSvc.EncryptionPassword(entity.PassWord))
+                if (customer.PassWord == AuthencationDataSvc.EncryptionPassword(entity.Password))
                 {
                     return true;
                 }

@@ -9,8 +9,8 @@ namespace API.Controllers
     [ApiController]
     public class LoginAdminAPIController : ControllerBase
     {
-        private readonly ILoginSvc<Admin> _loginSvc;
-        public LoginAdminAPIController(ILoginSvc<Admin> loginSvc)
+        private readonly ILoginSvc<Login> _loginSvc;
+        public LoginAdminAPIController(ILoginSvc<Login> loginSvc)
         {
             _loginSvc = loginSvc;
         }
@@ -21,7 +21,7 @@ namespace API.Controllers
         /// <response Code="404">Không tìm thấy</response>
         /// <returns>Kết quả đăng nhập</returns>
         [HttpPost("login")]
-        public async Task<ActionResult<bool>> LoginAdmin([FromBody] Admin admin)
+        public async Task<ActionResult<bool>> LoginAdmin([FromBody] Login admin)
         {
             var data = await _loginSvc.Login(admin);
             if(data == false)

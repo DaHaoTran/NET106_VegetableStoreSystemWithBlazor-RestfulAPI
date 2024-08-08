@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Services.Implement
 {
-    public class AdminLoginSvc : ILoginSvc<Admin>
+    public class AdminLoginSvc : ILoginSvc<Login>
     {
         private readonly FastFoodDBContext _dbContext;
 
@@ -15,7 +15,7 @@ namespace API.Services.Implement
             _dbContext = dbContext;
         }
 
-        public async Task<bool> Login(Admin entity)
+        public async Task<bool> Login(Login entity)
         {
             var admin = await _dbContext.admins.Where(x => x.Email == entity.Email).FirstOrDefaultAsync();
             if(admin != default)
