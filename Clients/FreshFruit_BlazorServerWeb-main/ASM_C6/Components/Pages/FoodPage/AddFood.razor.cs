@@ -75,6 +75,7 @@ namespace ASM_C6.Components.Pages.FoodPage
                 var encryptedFileName = await EncryptFileNameAsync(food.BrowserFile);
                 // Đường dẫn lưu trữ ảnh
                 string filePath = Path.Combine(_evironment.WebRootPath, "images");
+                //Path 2: string filePath = @"D:\FPoly\CNTT\NET106_LapTrinhC#6_SU24\Labs\NET106_PS30117_TranGiaHao_ASM\Clients\FreshFruit_BlazorServerWeb-main\ASM_C6\wwwroot\images";
                 // Gọi phương thức SaveImageAsync để lưu ảnh
                 var imageSaveResponse = await SaveImageAsync(food.BrowserFile, encryptedFileName, filePath);
 
