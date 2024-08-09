@@ -1,0 +1,158 @@
+﻿@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@using NetcodeHub.Packages.Extensions.LocalStorage
+@using NetcodeHub.Packages.Extensions.SessionStorage
+@inject ILocalStorageService localStorageService
+@inject ISessionStorageService sessionStorageService
+@using Newtonsoft.Json
+
+<!-- Navbar start -->
+<div class="container-fluid fixed-top">
+    <div class="container topbar bg-primary d-none d-lg-block">
+        <div class="d-flex justify-content-between">
+            <div class="top-info ps-2">
+                <small class="me-3"><i class="fas fa-map-marker-alt me-2 text-secondary"></i> <a href="#" class="text-white">SD18318_Nhom4_C#6</a></small>
+                <small class="me-3"><i class="fas fa-envelope me-2 text-secondary"></i><a href="#" class="text-white">Email@Example.com</a></small>
+            </div>
+            <div class="top-link pe-2">
+                <a href="#" class="text-white"><small class="text-white mx-2">Privacy Policy</small>/</a>
+                <a href="#" class="text-white"><small class="text-white mx-2">Terms of Use</small>/</a>
+                <a href="#" class="text-white"><small class="text-white ms-2">Sales and Refunds</small></a>
+            </div>
+        </div>
+    </div>
+    <div class="container px-0">
+        <nav class="navbar navbar-light bg-white navbar-expand-xl">
+            <a href="/" class="navbar-brand"><h1 class="text-primary display-6">Fruitables</h1></a>
+            <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars text-primary"></span>
+            </button>
+            <div class="collapse navbar-collapse bg-white" id="navbarCollapse">
+                <div class="navbar-nav mx-auto">
+                    <a href="/" class="nav-item nav-link active">Home</a>
+                    <a href="shop" class="nav-item nav-link">Shop</a>
+                    <a href="/details" class="nav-item nav-link">Shop Detail</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                        <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                            <a href="cart" class="dropdown-item">Cart</a>
+                            <a href="chackout" class="dropdown-item">Chackout</a>
+                            <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                            <a href="404.html" class="dropdown-item">404 Page</a>
+                        </div>
+                    </div>
+                    <a href="contact.html" class="nav-item nav-link">Contact</a>
+                </div>
+                <div class="d-flex m-3 me-0">
+                    <button class="btn-search btn border border-secondary btn-md-square rounded-circle bg-white me-4" data-bs-toggle="modal" data-bs-target="#searchModal"><i class="fas fa-search text-primary"></i></button>
+                    <a href="cart" class="position-relative me-4 my-auto">
+                        <i class="fa fa-shopping-bag fa-2x"></i>
+                        <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1" style="top: -5px; left: 15px; height: 20px; min-width: 20px;">@countcart</span>
+                    </a>
+                    @if (email != null)
+                    {
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">@email</a>
+                            <div class="dropdown-menu m-0 bg-secondary rounded-0">
+                                <a href="cusinformation" class="dropdown-item">Profile</a>
+                                <a href="cushis" class="dropdown-item">History</a>
+                                <a @onclick="@Logout" class="dropdown-item">Logout</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <a href="login" class="my-auto">
+                            <i class="fas fa-user fa-2x"></i>
+                        </a>
+                    }
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<!-- Navbar End -->
+<!-- Modal Search Start -->
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content rounded-0">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Search by keyword</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body d-flex align-items-center">
+                <div class="input-group w-75 mx-auto d-flex">
+                    <input type="search" class="form-control p-3" placeholder="keywords" @bind="searchkey" @onkeyup="HandleKeyUp" aria-describedby="search-icon-1">
+                    <button id="search-icon-1" class="input-group-text p-3" @onclick="GotoSearch"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Search End -->
+@code {
+    public string searchkey = "";
+    public int countcart;
+    public string email;
+    public ASM_C6.Model.Customer customer = new Model.Customer();
+    public ASM_C6.Model.OrderItem temporder = new Model.OrderItem();
+    public ASM_C6.Model.Admin tempadm = new Model.Admin();
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            GotoSearch();
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool first)
+    {
+        if (first)
+        {
+            // Tạo session cho các đối tượng cần thiết
+            countcart = await sessionStorageService.GetItemsCountAsync<ASM_C6.Model.OrderItem>("cart");
+
+            await sessionStorageService.SaveItemAsModelAsync<ASM_C6.Model.Customer>("Login", customer);
+            await sessionStorageService.SaveItemAsModelAsync<Model.Admin>("AdmLogin", tempadm);
+            customer = await sessionStorageService.GetItemAsModelAsync<ASM_C6.Model.Customer>("Login");
+            if (customer != null)
+            {
+                // Truy cập và gán các thuộc tính của đối tượng Customer
+                email = customer.Email;
+
+                // Cập nhật giao diện
+                StateHasChanged();
+            }
+        }
+        else
+        {
+            // Khi trang đã được load và không phải là lần render đầu tiên
+            customer = await sessionStorageService.GetItemAsModelAsync<ASM_C6.Model.Customer>("Login");
+            if (customer != null)
+            {
+                // Truy cập và gán các thuộc tính của đối tượng Customer
+                email = customer.Email;
+
+                // Cập nhật giao diện
+                StateHasChanged();
+            }
+        }
+    }
+
+
+    private async void GotoSearch()
+    {
+        if (!string.IsNullOrWhiteSpace(searchkey))
+        {
+            await sessionStorageService.SaveAsStringAsync("search", searchkey);
+            NavigationManager.NavigateTo("/shop", true);
+        }
+    }
+
+    private async void Logout()
+    {
+        await sessionStorageService.ClearAllItemsAsync();
+        NavigationManager.NavigateTo("/", true);
+        StateHasChanged();
+    }
+}

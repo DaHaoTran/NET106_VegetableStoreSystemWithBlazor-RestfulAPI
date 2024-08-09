@@ -1,0 +1,40 @@
+﻿@page "/admin/addadm"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+
+<h3>Add Admin</h3>
+<EditForm Model="@admin" OnValidSubmit="@CreateAdmin" FormName="Create">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label class="form-label">Email</label>
+        <InputText id="email" class="form-control" type="email" @bind-Value="@admin.Email" required />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Password</label>
+        <InputText id="password" class="form-control" type="password" @bind-Value="@admin.Password" required />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Re-Password</label>
+        <InputText id="repw" class="form-control" type="password" @bind-Value="@repw" required />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Level</label>
+        <InputSelect class="form-control" @bind-Value="@admin.Level" required>
+            <option value="">Choose role</option>
+            <option value="false">Staff</option>
+            <option value="true">Admin</option>
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class=" btn btn-danger" onclick="@Backto">Cancel</button>
+</EditForm>
+
+

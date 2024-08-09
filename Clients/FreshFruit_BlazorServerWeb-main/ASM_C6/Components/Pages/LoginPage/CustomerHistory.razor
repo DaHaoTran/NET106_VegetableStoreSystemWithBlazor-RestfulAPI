@@ -1,0 +1,63 @@
+﻿@page "/cushistory"
+@layout ASM_C6.Components.Layout.CustomerLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@using NetcodeHub.Packages.Extensions.LocalStorage
+@using NetcodeHub.Packages.Extensions.SessionStorage
+@inject ILocalStorageService localStorageService
+@inject ISessionStorageService sessionStorageService
+
+
+<h3>CustomerHistory</h3>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Order code</th>
+                        <th>Order Date</th>
+                        <th>State</th>
+                        <th>Delivery Date</th>
+                        <th>Comment</th>
+                        <th>PaymentMethod</th>
+                        <th>Total</th>
+                        <th>CustomerEmail</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (paginatedAdmins != null && paginatedAdmins.Any())
+                    {
+                        @foreach (var item in paginatedAdmins)
+                        {
+                            <tr>
+                                <td>@item.OrderCode</td>
+                                <td>@item.OrderDate</td>
+                                <td>
+                                    @item.State
+                                </td>
+                                <td>
+                                    @item.DeliveryDate
+                                </td>
+                                <td>Comment</td>
+                                <td>@item.PaymentMethod</td>
+                                <td>@item.Total</td>
+                                <td>@item.CustomerEmail</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11">No data available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- Pagination controls -->
+            <div class="d-flex justify-content-between mb-4">
+                <button class="btn btn-primary" @onclick="PreviousPage" disabled="@((currentPage == 1) ? "true" : null)">Previous</button>
+                <div>Page @currentPage of @totalPages</div>
+                <button class="btn btn-primary" @onclick="NextPage" disabled="@((currentPage == totalPages) ? "true" : null)">Next</button>
+            </div>
+        </div>
+    </div>

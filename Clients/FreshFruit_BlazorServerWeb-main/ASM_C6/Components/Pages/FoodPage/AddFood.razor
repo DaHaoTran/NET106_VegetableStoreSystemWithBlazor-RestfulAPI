@@ -1,0 +1,58 @@
+﻿@page "/admin/addfood"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+
+@rendermode InteractiveServer
+
+
+<h3>Add Food</h3>
+
+<EditForm Model="@food" OnValidSubmit="@CreateFood" FormName="CreateF">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label class="form-label">Name of food</label>
+        <InputText class="form-control" type="text" @bind-Value="@food.FoodName" required />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Current Price</label>
+        <InputNumber class="form-control" inputmode="numeric" pattern="[0-9]*" min="1" @bind-Value="@food.CurrentPrice" required />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Quantity in stock</label>
+        <InputNumber class="form-control" inputmode="numeric" pattern="[0-9]*" min="1" @bind-Value="@food.Left" required />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Food Image</label>
+        <InputFile class="form-control" OnChange="@HandleFileSelected" accept=".jpg,.jpeg,.png,.gif" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Category</label>
+        <InputSelect class="form-control" @bind-Value="@food.FCategoryCode" required>
+            <option value="">Choose category</option>
+            @foreach (var category in foodCategories)
+            {
+                <option value="@category.FCategoryCode">@category.CategoryName</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Admin</label>
+        <InputSelect class="form-control" @bind-Value="@food.AdminCode" required>
+            <option value="">Choose admin</option>
+            @foreach (var admin in admins)
+            {
+                <option value="@admin.AdminCode">@admin.Email</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Food</button>
+    <button type="button" class="btn btn-danger" onclick="@Backto">Cancel</button>
+</EditForm>

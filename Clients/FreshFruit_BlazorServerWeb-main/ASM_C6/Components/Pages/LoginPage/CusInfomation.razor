@@ -1,0 +1,34 @@
+﻿@page "/cusinformation"
+@layout ASM_C6.Components.Layout.CustomerLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@using NetcodeHub.Packages.Extensions.LocalStorage
+@using NetcodeHub.Packages.Extensions.SessionStorage
+@inject ILocalStorageService localStorageService
+@inject ISessionStorageService sessionStorageService
+
+
+<h3>Customer Infomation</h3>
+
+<EditForm Model="@customer" OnValidSubmit="@EditCus" FormName="EditCus">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label class="form-label">Name</label>
+        <InputText class="form-control" type="text" @bind-Value="@customer.CustomerName" required />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" type="email" @bind-Value="@customer.CustomerEmail" required />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Phone</label>
+        <InputText class="form-control" type="tel" @bind-Value="@customer.PhoneNumber" required />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Address</label>
+        <InputText class="form-control" type="tel" @bind-Value="@customer.Address" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>

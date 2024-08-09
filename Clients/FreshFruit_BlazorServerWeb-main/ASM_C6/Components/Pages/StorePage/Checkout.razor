@@ -1,0 +1,118 @@
+﻿@page "/checkout"
+@layout ASM_C6.Components.Layout.MainLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@using NetcodeHub.Packages.Extensions.LocalStorage
+@using NetcodeHub.Packages.Extensions.SessionStorage
+@inject ILocalStorageService localStorageService
+@inject ISessionStorageService sessionStorageService
+
+<!-- Checkout Page Start -->
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        <h1 class="mb-4">Billing details</h1>
+        <EditForm Model="@cusinfo" OnValidSubmit="@SaveOrder" FormName="Saveorder">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            <div class="row g-5">
+                <div class="col-md-12 col-lg-6 col-xl-7">
+                    <div class="row">
+                        <div class="col-md-12 col-lg-6">
+                            <div class="form-item w-100">
+                                <label class="form-label my-3">Name<sup>*</sup></label>
+                                <InputText type="text" class="form-control" @bind-Value="cusinfo.CustomerName" required />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Address <sup>*</sup></label>
+                        <InputText type="text" class="form-control" placeholder="House Number Street Name" @bind-Value="cusinfo.Address" required />
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Mobile<sup>*</sup></label>
+                        <InputText type="tel" class="form-control" @bind-Value="cusinfo.PhoneNumber" required />
+                    </div>
+                    <div class="form-item">
+                        <label class="form-label my-3">Email Address<sup>*</sup></label>
+                        <InputText type="email" class="form-control" @bind-Value="cusinfo.CustomerEmail" required />
+                    </div>
+                    <hr>
+                    <div class="form-check my-3">
+                        <label class="form-check-label" for="Address-1">Ship to a different address?</label>
+                    </div>
+                    <div class="form-item">
+                        <InputTextArea name="text" class="form-control" spellcheck="false" cols="30" rows="11" placeholder="Order Notes (Optional)" @bind-Value="comment"></InputTextArea>
+                    </div>
+                </div>
+
+                <div class="col-md-12 col-lg-6 col-xl-5">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Products</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var pro in items)
+                                {
+                                    if (foodDetails.TryGetValue(pro.FoodCode, out var details))
+                                    {
+                                        <tr>
+                                            <th scope="row">
+                                                <div class="d-flex align-items-center mt-2">
+                                                    <img src="@details.ImageUrl" class="img-fluid rounded-circle" style="width: 90px; height: 90px;" alt="" />
+                                                </div>
+                                            </th>
+                                            <td class="py-5">@details.FoodName</td>
+                                            <td class="py-5">$@pro.UnitPrice</td>
+                                            <td class="py-5">@pro.Quantity</td>
+                                            <td class="py-5">@((pro.UnitPrice * pro.Quantity).ToString("C"))</td>
+                                        </tr>
+                                    }
+                                }
+                                <tr>
+                                    <th scope="row"></th>
+                                    <td class="py-5"></td>
+                                    <td class="py-5"></td>
+                                    <td class="py-5">
+                                        <p class="mb-0 text-dark py-3">Subtotal</p>
+                                    </td>
+                                    <td class="py-5">
+                                        <div class="py-3 border-bottom border-top">
+                                            <p class="mb-0 text-dark">$@SubTotal</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row g-4 text-center align-items-center justify-content-center border-bottom py-3">
+                        <div class="col-12">
+                            <div class="form-check text-start my-3">
+                                @foreach (var item in status)
+                                {
+                                    <div class="form-check">
+                                        <InputRadioGroup @bind-Value="paymentmethod">
+                                            <InputRadio Value="@item.Name"></InputRadio>
+                                            <label class="form-check-label" for="@item.Name">@item.Name</label>
+                                        </InputRadioGroup>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-4 text-center align-items-center justify-content-center pt-4">
+                        <button type="submit" class="btn border-secondary py-3 px-4 text-uppercase w-100 text-primary">Place Order</button>
+                    </div>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>
+<!-- Checkout Page End -->

@@ -1,0 +1,17 @@
+﻿@page "/admin/addcate"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Add Category</h3>
+<EditForm Model="@category" OnValidSubmit="@CreateCate" FormName="CreateCate">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label class="form-label" for="name">Name of Category</label>
+        <InputText id="name" class="form-control" @bind-Value="@category.CategoryName" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-danger" onclick="@Backto">Cancel</button>
+
+</EditForm>

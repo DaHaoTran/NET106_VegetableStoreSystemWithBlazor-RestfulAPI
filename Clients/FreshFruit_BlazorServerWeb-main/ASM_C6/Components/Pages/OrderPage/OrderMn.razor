@@ -1,0 +1,69 @@
+﻿@page "/ordersmn"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Order DataTables</h6>
+        <a class="bi bi-plus-square-fill-nav-menu" href="addfood">Create New</a>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>OrderCode</th>
+                        <th>OrderDate</th>
+                        <th>Status</th>
+                        <th>DeliveryDate</th>
+                        <th>Comment</th>
+                        <th>PaymentMethod</th>
+                        <th>Total</th>
+                        <th>CustomerEmail</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (paginatedAdmins != null && paginatedAdmins.Any())
+                    {
+                        @foreach (var item in paginatedAdmins)
+                        {
+                            <tr>
+                                <td>@item.OrderCode</td>
+                                <td>@item.OrderDate</td>
+                                <td>@item.State</td>
+                                <td>@item.DeliveryDate</td>
+                                <td>@item.Comment</td>
+                                <td>@item.PaymentMethod</td>
+                                <td>@item.Total</td>
+                                <td>@item.CustomerEmail</td>
+                                <td>
+                                    <a href="admin/editfood/@item.OrderCode" class="btn btn-outline-primary">Edit</a>
+                                </td>
+                                <td>
+                                    <a @onclick=@(e => ConfirmDelete(item.OrderCode)) class="btn btn-outline-danger">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11">No data available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- Pagination controls -->
+            <div class="d-flex justify-content-between mb-4">
+                <button class="btn btn-primary" @onclick="PreviousPage" disabled="@((currentPage == 1) ? "true" : null)">Previous</button>
+                <div>Page @currentPage of @totalPages</div>
+                <button class="btn btn-primary" @onclick="NextPage" disabled="@((currentPage == totalPages) ? "true" : null)">Next</button>
+            </div>
+        </div>
+    </div>
+</div>

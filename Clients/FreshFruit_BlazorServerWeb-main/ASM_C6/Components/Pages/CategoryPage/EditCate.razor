@@ -1,0 +1,15 @@
+﻿@page "/admin/editcate/{id:guid}"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<EditForm Model="@category" OnValidSubmit="@EditCategory" FormName="EditC">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label class="form-label">Category Name</label>
+        <InputText class="form-control" type="text" @bind-Value="@category.CategoryName" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-danger"onclick="@Backto">Cancel</button>
+</EditForm>

@@ -1,0 +1,35 @@
+﻿@page "/admin/addcombodetail"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Add Combo Detail</h3>
+
+<EditForm Model="@combodetail" OnValidSubmit="@CreateDetail" FormName="CreateD">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label class="form-label">Name of Food</label>
+        <InputSelect class="form-control" @bind-Value="@combodetail.FoodCode">
+            <option value="">Choose your Food</option>
+            @foreach (var food in foods)
+            {
+                <option value="@food.FoodCode">@food.FoodName</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Name of Combo</label>
+        <InputSelect class="form-control" @bind-Value="@combodetail.ComboCode">
+            <option value="">Choose your Combo</option>
+            @foreach (var combo in combos)
+            {
+                <option value="@combo.ComboCode">@combo.ComboName</option>
+            }
+        </InputSelect>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Food</button>
+    <button type="button" class="btn btn-danger" onclick="@Backto">Cancel</button>
+</EditForm>

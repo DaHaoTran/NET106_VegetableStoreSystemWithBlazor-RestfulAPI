@@ -1,0 +1,21 @@
+﻿@page "/admin/editadm/{id:guid}"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+<h3>Change Password</h3>
+
+<EditForm Model="@admin" OnValidSubmit="EditAdm" FormName="Edit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="form-group">
+        <label class="form-label">New Password</label>
+        <InputText class="form-control" type="password" @bind-Value="@admin.Password"  required />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Re-Password</label>
+        <InputText class="form-control" type="password" @bind-Value="repw" />
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-danger" onclick="@Backto">Cancel</button>
+</EditForm>

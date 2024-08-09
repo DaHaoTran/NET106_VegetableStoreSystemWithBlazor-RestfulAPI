@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API", "API\API.csproj", "{D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DTO", "DTO\DTO.csproj", "{C9B72475-F7D9-4E54-9ABB-B7991F6C39EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestAPI", "XUnitTestAPI\XUnitTestAPI.csproj", "{4611623E-24C1-43FB-AD15-F574BC614E39}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestAPI", "XUnitTestAPI\XUnitTestAPI.csproj", "{4611623E-24C1-43FB-AD15-F574BC614E39}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASM_C6", "Clients\FreshFruit_BlazorServerWeb-main\ASM_C6\ASM_C6.csproj", "{623D2B4A-B766-452E-92F3-1A2415F80012}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{4611623E-24C1-43FB-AD15-F574BC614E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4611623E-24C1-43FB-AD15-F574BC614E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4611623E-24C1-43FB-AD15-F574BC614E39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{623D2B4A-B766-452E-92F3-1A2415F80012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{623D2B4A-B766-452E-92F3-1A2415F80012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{623D2B4A-B766-452E-92F3-1A2415F80012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{623D2B4A-B766-452E-92F3-1A2415F80012}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,25 @@
+﻿@page "/changepw"
+@layout ASM_C6.Components.Layout.CustomerLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+@using NetcodeHub.Packages.Extensions.LocalStorage
+@using NetcodeHub.Packages.Extensions.SessionStorage
+@inject ILocalStorageService localStorageService
+@inject ISessionStorageService sessionStorageService
+
+<h3>Change Password</h3>
+<EditForm Model="@customer" OnValidSubmit="@Changepw" FormName="Changepw">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label class="form-label">New Password</label>
+        <InputText class="form-control" type="password" @bind-Value="@customer.PassWord" required />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Re-Password</label>
+        <InputText class="form-control" type="password" @bind-Value="@repw" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</EditForm>

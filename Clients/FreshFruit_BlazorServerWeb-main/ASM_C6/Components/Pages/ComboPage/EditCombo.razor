@@ -1,0 +1,39 @@
+﻿@page "/editcombo/{id:guid}"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<h3>Edit Combo</h3>
+
+<EditForm Model="@combo" OnValidSubmit="@EditCb" FormName="EditCb">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label class="form-label">Name of combo</label>
+        <InputText class="form-control" type="text" @bind-Value="@combo.ComboName" required />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Current Price</label>
+        <InputNumber class="form-control" inputmode="numeric" pattern="[0-9]*" min="1" @bind-Value="@combo.CurrentPrice" required />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Previous Price</label>
+        <InputNumber class="form-control" inputmode="numeric" pattern="[0-9]*" min="1" @bind-Value="@combo.PreviousPrice" required />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Combo Image</label>
+        <InputFile class="form-control" OnChange="@HandleFileSelected" accept=".jpg,.jpeg,.png,.gif" />
+    </div>
+    <div class="form-group">
+        <label class="form-label">Exp Date</label>
+        <InputDate @bind-Value="@combo.ApplyDate"></InputDate>
+    </div>
+    <div class="form-group">
+        <label class="form-label">Exp Date</label>
+        <InputDate @bind-Value="@combo.ExpDate"></InputDate>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Food</button>
+    <button type="button" class="btn btn-danger" onclick="@Backto">Cancel</button>
+</EditForm>

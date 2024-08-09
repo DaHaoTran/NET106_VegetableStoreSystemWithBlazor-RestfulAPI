@@ -1,0 +1,20 @@
+﻿@page "/admin/addcus"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+
+<h3>Add Customer</h3>
+
+<EditForm Model="@customer" OnValidSubmit="@CreateCus" FormName="CreateCus">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label class="form-label">Email</label>
+        <InputText class="form-control" type="email" @bind-Value="@customer.Email" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="button" class="btn btn-danger" onclick="@Backto">Cancel</button>
+</EditForm>

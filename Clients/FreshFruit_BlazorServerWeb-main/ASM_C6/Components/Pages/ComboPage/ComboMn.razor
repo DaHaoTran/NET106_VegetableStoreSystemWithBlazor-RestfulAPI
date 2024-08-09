@@ -1,0 +1,66 @@
+﻿@page "/admin/combosmn"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Admin DataTables</h6>
+        <a class="bi bi-plus-square-fill-nav-menu" href="addcombo">Create New Combo</a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Combo code</th>
+                        <th>Name of combo</th>
+                        <th>CurrentPrice</th>
+                        <th>PreviousPrice</th>
+                        <th>Image</th>
+                        <th>ApplyDate</th>
+                        <th>ExpDate</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (paginatedAdmins != null)
+                    {
+                        @foreach (var item in paginatedAdmins)
+                        {
+                            <tr>
+                                <td>@item.ComboCode</td>
+                                <td>@item.ComboName</td>
+                                <td>@item.CurrentPrice</td>
+                                <td>@item.PreviousPrice</td>
+                                <td><img src="@item.Image" alt="Combo Image" style="width: 100px; height: 100px;" /></td>
+                                <td>@item.ApplyDate</td>
+                                <td>@item.ExpDate</td>
+                                <td>
+                                    <a href="admin/editcombo/@item.ComboCode" class="btn btn-outline-primary">Edit</a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-danger" @onclick="@(() => ConfirmDelete(item.ComboCode))">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7">No data available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- Pagination controls -->
+            <div class="d-flex justify-content-between mb-4">
+                <button class="btn btn-primary" @onclick="PreviousPage" disabled="@((currentPage == 1) ? "true" : null)">Previous</button>
+                <div>Page @currentPage of @totalPages</div>
+                <button class="btn btn-primary" @onclick="NextPage" disabled="@((currentPage == totalPages) ? "true" : null)">Next</button>
+            </div>
+        </div>
+    </div>
+</div>

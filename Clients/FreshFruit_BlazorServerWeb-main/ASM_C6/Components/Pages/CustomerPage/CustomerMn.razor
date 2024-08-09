@@ -1,0 +1,57 @@
+﻿@page "/admin/cusmn"
+@layout ASM_C6.Components.Layout.AdminLayout
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Customer DataTables</h6>
+        <a class="bi bi-plus-square-fill-nav-menu" href="addcus">Create New Customer</a>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>User Name</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (paginatedAdmins != null && paginatedAdmins.Any())
+                    {
+                        @foreach (var item in paginatedAdmins)
+                        {
+                            <tr>
+                                <td>@item.Email</td>
+                                <td>@item.UserName</td>
+                                <td>
+                                    <a @onclick=@(e => ConfirmReset(item.Email)) class="btn btn-outline-primary">Reset Password</a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-outline-danger" @onclick="@(() => ConfirmDelete(item.Email))">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="11">No data available</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <!-- Pagination controls -->
+            <div class="d-flex justify-content-between mb-4">
+                <button class="btn btn-primary" @onclick="PreviousPage" disabled="@((currentPage == 1) ? "true" : null)">Previous</button>
+                <div>Page @currentPage of @totalPages</div>
+                <button class="btn btn-primary" @onclick="NextPage" disabled="@((currentPage == totalPages) ? "true" : null)">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
