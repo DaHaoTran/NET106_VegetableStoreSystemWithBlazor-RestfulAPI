@@ -3,6 +3,10 @@
     "mssql1": {
       "ignored": "true",
       "type": "mssql"
+    },
+    "secrets1": {
+      "type": "secrets",
+      "dynamicId": null
     }
   }
 }
