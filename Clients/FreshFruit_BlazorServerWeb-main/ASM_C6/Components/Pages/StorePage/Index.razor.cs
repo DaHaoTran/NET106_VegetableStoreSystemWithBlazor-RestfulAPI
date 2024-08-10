@@ -228,6 +228,7 @@ namespace ASM_C6.Components.Pages.StorePage
             {
                 _isRenderCompleted = true;
                 jmodule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/script.js");
+                
             }
         }
 
